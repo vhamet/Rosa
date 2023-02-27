@@ -10,8 +10,13 @@ export class User implements UserClient {
   createdAt: Date;
 
   @Field(() => String)
-  description: string;
+  username: string;
+
+  @Field(() => String, {
+    nullable: true,
+  })
+  phone: string;
 
   @Field(() => String)
-  username: string;
+  password: string;
 }
