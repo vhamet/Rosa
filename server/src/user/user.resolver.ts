@@ -14,18 +14,18 @@ export class UserResolver {
   constructor(private userService: UserService) {}
 
   private generateToken(user) {
-    console.log({ env: process.env, key: process.env.JWT_SECRET_KEY });
     return jwt.sign(user, process.env.JWT_SECRET_KEY);
   }
+
   @Query(() => String)
   welcome(): string {
     return 'Welcome to Rosa !';
   }
 
-  @Mutation(() => User)
+  @Mutation(() => String)
   async signup(
     @Args('userCreateInput') userCreateInput: UserCreateInput,
-  ): Promise<User> {
+  ): Promise<string> {
     const encryptedPassword = await bcrypt.hashSync(
       userCreateInput.password,
       SALT_ROUNDS,
@@ -34,8 +34,9 @@ export class UserResolver {
       ...userCreateInput,
       password: encryptedPassword,
     });
+    delete signedUpUser.password;
 
-    return signedUpUser;
+    return this.generateToken(signedUpUser);
   }
 
   @Mutation(() => String)
@@ -49,8 +50,6 @@ export class UserResolver {
     }
     delete user.password;
 
-    const token = this.generateToken(user);
-
-    return token;
+    return this.generateToken(user);
   }
 }
