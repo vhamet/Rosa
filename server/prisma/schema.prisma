@@ -4,7 +4,7 @@ generator client {
 
 datasource db {
   provider = "postgresql"
-  url      = "postgresql://postgres:postgres@localhost:5432/graphql_example?connect_timeout=300"
+  url      = "postgresql://postgres:postgres@localhost:5432/rosa?connect_timeout=300"
 }
 
 model User {

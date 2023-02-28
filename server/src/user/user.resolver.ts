@@ -1,7 +1,11 @@
 import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
+import * as bcrypt from 'bcrypt';
+
 import { UserCreateInput } from './user.input';
 import { User } from './user.model';
 import { UserService } from './user.service';
+
+const SALT_ROUNDS = 12;
 
 @Resolver(() => User)
 export class UserResolver {
@@ -16,7 +20,15 @@ export class UserResolver {
   async signup(
     @Args('userCreateInput') userCreateInput: UserCreateInput,
   ): Promise<User> {
-    const signedUpUser = await this.userService.createUser(userCreateInput);
+    console.log(bcrypt);
+    const encryptedPassword = await bcrypt.hashSync(
+      userCreateInput.password,
+      SALT_ROUNDS,
+    );
+    const signedUpUser = await this.userService.createUser({
+      ...userCreateInput,
+      password: encryptedPassword,
+    });
 
     return signedUpUser;
   }
