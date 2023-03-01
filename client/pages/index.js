@@ -1,18 +1,46 @@
-import Head from 'next/head';
-import styles from '../styles/Home.module.css';
+import Head from "next/head";
+import {
+  ApolloClient,
+  InMemoryCache,
+  ApolloProvider,
+  gql,
+  useQuery,
+} from "@apollo/client";
 
-export default function Home() {
+import styles from "../styles/Home.module.css";
+
+const client = new ApolloClient({
+  uri: "http://localhost:3000/graphql",
+  cache: new InMemoryCache(),
+});
+
+const QUERY = gql`
+  query Welcome {
+    welcome
+  }
+`;
+
+const App = () => (
+  <ApolloProvider client={client}>
+    <Home />
+  </ApolloProvider>
+);
+
+const Home = () => {
+  const { loading, error, data } = useQuery(QUERY);
+
+  if (loading) return <p>Loading...</p>;
+  if (error) return <p>Error : {error.message}</p>;
+
   return (
     <div className={styles.container}>
       <Head>
-        <title>Create Next App</title>
+        <title>{data.welcome}</title>
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
       <main>
-        <h1 className={styles.title}>
-          Welcome to <a href="https://nextjs.org">Next.js!</a>
-        </h1>
+        <h1 className={styles.title}>{data.welcome}</h1>
 
         <p className={styles.description}>
           Get started by editing <code>pages/index.js</code>
@@ -55,7 +83,7 @@ export default function Home() {
           target="_blank"
           rel="noopener noreferrer"
         >
-          Powered by{' '}
+          Powered by{" "}
           <img src="/vercel.svg" alt="Vercel" className={styles.logo} />
         </a>
       </footer>
@@ -111,5 +139,7 @@ export default function Home() {
         }
       `}</style>
     </div>
-  )
-}
+  );
+};
+
+export default App;
