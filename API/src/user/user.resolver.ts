@@ -1,9 +1,12 @@
 import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
-import { UnauthorizedException } from '@nestjs/common';
+import {
+  UnauthorizedException,
+  NotFoundException,
+  ConflictException,
+} from '@nestjs/common';
 import * as bcrypt from 'bcrypt';
 import * as jwt from 'jsonwebtoken';
 
-import { UserCreateInput } from './user.input';
 import { User } from './user.model';
 import { UserService } from './user.service';
 
@@ -24,14 +27,18 @@ export class UserResolver {
 
   @Mutation(() => String)
   async signup(
-    @Args('userCreateInput') userCreateInput: UserCreateInput,
+    @Args('username') username: string,
+    @Args('password') password: string,
   ): Promise<string> {
-    const encryptedPassword = await bcrypt.hashSync(
-      userCreateInput.password,
-      SALT_ROUNDS,
-    );
+    const encryptedPassword = await bcrypt.hashSync(password, SALT_ROUNDS);
+
+    const existingUser = await this.userService.getUser(username);
+    if (existingUser) {
+      throw new ConflictException(`Username '${username}' is already used`);
+    }
+
     const signedUpUser = await this.userService.createUser({
-      ...userCreateInput,
+      username,
       password: encryptedPassword,
     });
     delete signedUpUser.password;
@@ -45,6 +52,11 @@ export class UserResolver {
     @Args('password') password: string,
   ): Promise<string> {
     const user = await this.userService.getUser(username);
+    if (!user) {
+      throw new NotFoundException({
+        error: 'No user with this username could be found',
+      });
+    }
     if (!bcrypt.compareSync(password, user.password)) {
       throw new UnauthorizedException({ error: 'Wrong password' });
     }

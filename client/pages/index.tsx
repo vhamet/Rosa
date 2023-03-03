@@ -15,6 +15,7 @@ const Home = () => {
         <div>
           <Link href="/events">Events</Link>
           <Link href="/signin">Sign in</Link>
+          <Link href="/signup">Sign up</Link>
         </div>
       </main>
     </div>
