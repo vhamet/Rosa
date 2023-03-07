@@ -1,5 +1,7 @@
 import { gql, useMutation } from "@apollo/client";
 import AuthenticationForm from "../../components/AuthenticationForm";
+import useUserContext from "../../services/authentication/user-context";
+import { authenticateUser } from "../../services/authentication/utils";
 
 const SIGNUP_MUTATION = gql`
   mutation Signup($username: String!, $password: String!) {
@@ -8,12 +10,13 @@ const SIGNUP_MUTATION = gql`
 `;
 
 const Signup = () => {
+  const { dispatch } = useUserContext();
+
   const [signup] = useMutation(SIGNUP_MUTATION, {
     onError: (error) => console.log({ error }),
-    onCompleted: (data) => console.log({ data }),
+    onCompleted: (data) => authenticateUser(data.signup, dispatch),
   });
   const onSubmit = (formData) => {
-    console.log({ formData });
     signup({ variables: formData });
   };
 

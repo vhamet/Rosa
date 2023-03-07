@@ -2,7 +2,7 @@ import { GetStaticPaths, GetStaticProps } from "next";
 import { useRouter } from "next/router";
 import { gql, useQuery } from "@apollo/client";
 
-import client from "../../apollo-client";
+import client from "../../services/apollo/apollo-client";
 
 const QUERY = gql`
   query Welcome {
