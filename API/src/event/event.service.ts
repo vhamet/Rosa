@@ -5,6 +5,10 @@ import { UserService } from 'src/user/user.service';
 import { EventCreateInput } from './event.input';
 import { Event } from './event.model';
 
+const SAFE_USER_FIELDS = {
+  select: { id: true, username: true, createdAt: true, phone: true },
+};
+
 @Injectable()
 export class EventService {
   constructor(
@@ -32,7 +36,7 @@ export class EventService {
     return this.prisma.event.findUnique({
       where: { id },
       include: {
-        createdBy: true,
+        createdBy: SAFE_USER_FIELDS,
       },
     });
   }
@@ -40,7 +44,7 @@ export class EventService {
   async getEvents(): Promise<Event[]> {
     return this.prisma.event.findMany({
       include: {
-        createdBy: true,
+        createdBy: SAFE_USER_FIELDS,
       },
     });
   }
