@@ -16,18 +16,16 @@ export class EventService {
     title,
     description,
     date,
+    userId,
   }: EventCreateInput): Promise<Event> {
-    const user = await this.userService.getUserById(1);
-    const event = await this.prisma.event.create({
+    return this.prisma.event.create({
       data: {
         title,
         description,
         date: moment(date, 'YYYY-MM-DD').toDate(),
-        userId: user.id,
+        userId,
       },
     });
-
-    return { ...event, createdBy: user };
   }
 
   async getEvent(id: number): Promise<Event> {
