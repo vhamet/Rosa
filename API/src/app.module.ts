@@ -6,13 +6,15 @@ import { GraphQLModule } from '@nestjs/graphql';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { UserModule } from './user/user.module';
+import { EventModule } from './event/event.module';
 
 @Module({
   imports: [
     UserModule,
+    EventModule,
     ConfigModule.forRoot({ isGlobal: true }),
     GraphQLModule.forRoot<ApolloDriverConfig>({
-      include: [UserModule],
+      include: [UserModule, EventModule],
       driver: ApolloDriver,
       autoSchemaFile: true,
     }),

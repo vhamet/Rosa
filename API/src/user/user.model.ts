@@ -1,8 +1,10 @@
 import { ObjectType, Field, Int } from '@nestjs/graphql';
 import { User as UserClient } from '@prisma/client';
+import { PartialBy } from 'src/utils/types';
 
+type SafeUserClient = PartialBy<UserClient, 'password'>;
 @ObjectType()
-export class User implements UserClient {
+export class User implements SafeUserClient {
   @Field(() => Int)
   id: number;
 
@@ -17,6 +19,8 @@ export class User implements UserClient {
   })
   phone: string;
 
-  @Field(() => String)
-  password: string;
+  @Field(() => String, {
+    nullable: true,
+  })
+  password?: string;
 }

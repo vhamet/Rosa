@@ -27,7 +27,7 @@ export class AuthResolver {
   ): Promise<string> {
     const encryptedPassword = await bcrypt.hashSync(password, SALT_ROUNDS);
 
-    const existingUser = await this.userService.getUser(username);
+    const existingUser = await this.userService.getUserByUsername(username);
     if (existingUser) {
       throw new ConflictException(`Username '${username}' is already used`);
     }
@@ -46,7 +46,7 @@ export class AuthResolver {
     @Args('username') username: string,
     @Args('password') password: string,
   ): Promise<string> {
-    const user = await this.userService.getUser(username);
+    const user = await this.userService.getUserByUsername(username);
     if (!user) {
       throw new NotFoundException({
         error: 'No user with this username could be found',
