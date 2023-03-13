@@ -21,7 +21,7 @@ export type UserContextType = {
   dispatch: Dispatch<AuthenticationActionType>;
 };
 
-function reducer(state: UserContextType, action: AuthenticationActionType) {
+const reducer = (state: UserContextType, action: AuthenticationActionType) => {
   switch (action.type) {
     case UserReducerActions.signin:
       return { ...state, auth: action.payload };
@@ -30,7 +30,7 @@ function reducer(state: UserContextType, action: AuthenticationActionType) {
     default:
       throw new Error();
   }
-}
+};
 
 const UserContext = createContext<UserContextType>(null);
 const useUserContext = () => useContext(UserContext);

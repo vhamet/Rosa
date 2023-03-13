@@ -6,7 +6,7 @@ import "../styles/globals.css";
 
 const apolloClient = initializeApollo({});
 
-function App({ Component, pageProps }) {
+const App = ({ Component, pageProps }) => {
   return (
     <ApolloProvider client={apolloClient}>
       <UserProvider>
@@ -14,6 +14,6 @@ function App({ Component, pageProps }) {
       </UserProvider>
     </ApolloProvider>
   );
-}
+};
 
 export default App;

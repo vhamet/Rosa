@@ -17,7 +17,15 @@ const EventItem = ({
     createdBy: { username },
   },
 }: EventProps) => {
-  return <div className="event-item">{title}</div>;
+  return (
+    <div className="event-item">
+      <div>
+        {title} by {username}
+      </div>
+      <div>{description}</div>
+      <div>on {date}</div>
+    </div>
+  );
 };
 
 export default EventItem;
