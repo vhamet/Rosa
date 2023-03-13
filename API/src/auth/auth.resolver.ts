@@ -46,7 +46,7 @@ export class AuthResolver {
     @Args('username') username: string,
     @Args('password') password: string,
   ): Promise<string> {
-    const user = await this.userService.getUserByUsername(username);
+    const user = await this.userService.getUserByUsername(username, false);
     if (!user) {
       throw new NotFoundException({
         error: 'No user with this username could be found',

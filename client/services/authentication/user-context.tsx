@@ -1,5 +1,7 @@
 import jwtDecode from "jwt-decode";
+import Cookies from "js-cookie";
 import { useReducer, createContext, useContext, Dispatch } from "react";
+import { ACCESS_TOKEN } from "../../utils/const";
 
 export enum UserReducerActions {
   signin = "signin",
@@ -35,7 +37,7 @@ const useUserContext = () => useContext(UserContext);
 
 export const UserProvider = ({ children }) => {
   const accessToken =
-    typeof window !== "undefined" && localStorage.getItem("auth");
+    typeof window !== "undefined" && Cookies.get(ACCESS_TOKEN);
   const decodedToken: AuthenticationType =
     accessToken && jwtDecode(accessToken);
 

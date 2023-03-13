@@ -1,6 +1,6 @@
 import Head from "next/head";
 import Link from "next/link";
-import withAuth from "../components/withPrivateRouteHOC";
+import withPrivateRouteHOC from "../components/withPrivateRouteHOC";
 
 const Home = () => {
   return (
@@ -23,4 +23,4 @@ const Home = () => {
   );
 };
 
-export default withAuth(Home);
+export default withPrivateRouteHOC(Home);

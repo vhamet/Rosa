@@ -1,9 +1,11 @@
 import jwtDecode from "jwt-decode";
+import Cookies from "js-cookie";
 import { UserReducerActions } from "./user-context";
+import { ACCESS_TOKEN } from "../../utils/const";
 
 export const authenticateUser = (accessToken, userDispatch) => {
   const decodedToken = jwtDecode(accessToken);
-  localStorage.setItem("auth", accessToken);
+  Cookies.set(ACCESS_TOKEN, accessToken, { expires: 7, path: "" });
   userDispatch({
     type: UserReducerActions.signin,
     payload: decodedToken,
@@ -11,7 +13,7 @@ export const authenticateUser = (accessToken, userDispatch) => {
 };
 
 export const signout = (userDispatch) => {
-  localStorage.removeItem("auth");
+  Cookies.remove(ACCESS_TOKEN);
   userDispatch({
     type: UserReducerActions.signout,
   });

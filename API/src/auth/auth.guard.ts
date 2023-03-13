@@ -21,7 +21,7 @@ export class JwtGuard implements CanActivate {
 
       return true;
     } catch (error) {
-      console.log(`Auth guard validation error:\n${error}`);
+      console.error(`Auth guard validation error:\n${error}`);
       return false;
     }
   }

@@ -15,7 +15,7 @@ const Signin = () => {
   const { dispatch } = useUserContext();
 
   const [signin] = useMutation(SIGNIN_MUTATION, {
-    onError: (error) => console.log({ error }),
+    onError: (error) => console.error({ error }),
     onCompleted: (data) => authenticateUser(data.signin, dispatch),
   });
   const onSubmit = (formData) => {

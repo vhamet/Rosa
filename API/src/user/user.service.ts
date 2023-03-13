@@ -19,6 +19,10 @@ export class UserService {
   }
 
   private userWithoutPassword(prismaUser: PrismaUser): User {
+    if (!prismaUser) {
+      return null;
+    }
+
     const user = { ...prismaUser };
     return this.exclude(user, ['password']);
   }
@@ -34,19 +38,19 @@ export class UserService {
     return this.userWithoutPassword(user);
   }
 
-  async getUserById(id: number): Promise<User> {
+  async getUserById(id: number, safe = true): Promise<User> {
     const user = await this.prisma.user.findUnique({
       where: { id },
     });
 
-    return this.userWithoutPassword(user);
+    return safe ? this.userWithoutPassword(user) : user;
   }
 
-  async getUserByUsername(username: string): Promise<User> {
+  async getUserByUsername(username: string, safe = true): Promise<User> {
     const user = await this.prisma.user.findUnique({
       where: { username },
     });
 
-    return this.userWithoutPassword(user);
+    return safe ? this.userWithoutPassword(user) : user;
   }
 }
