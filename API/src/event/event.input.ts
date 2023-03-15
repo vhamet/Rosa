@@ -11,7 +11,10 @@ export class EventCreateInput {
   description: string;
 
   @Field(() => String)
-  date: string;
+  start: string;
+
+  @Field(() => String)
+  end: string;
 
   @Field(() => Number)
   userId: number;

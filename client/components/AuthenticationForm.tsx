@@ -1,4 +1,5 @@
 import { useForm } from "react-hook-form";
+import FormInput from "./Form/FormInput";
 
 const AuthenticationForm = ({ onSubmit, actionLabel = "Confirm" }) => {
   const {
@@ -9,11 +10,22 @@ const AuthenticationForm = ({ onSubmit, actionLabel = "Confirm" }) => {
 
   return (
     <form className="authentication-form" onSubmit={handleSubmit(onSubmit)}>
-      <input {...register("username", { required: true })} />
-      {errors.username && <span>This field is required</span>}
-      <input type="password" {...register("password", { required: true })} />
-      {errors.password && <span>This field is required</span>}
-      <input type="submit" value={actionLabel} />
+      <FormInput
+        name="username"
+        label="Username"
+        error={errors.username}
+        register={register}
+        options={{ required: true }}
+      />
+      <FormInput
+        name="password"
+        label="Password"
+        type="password"
+        error={errors.password}
+        register={register}
+        options={{ required: true }}
+      />
+      <button>Sign in !</button>
     </form>
   );
 };

@@ -4,24 +4,17 @@ import { UseGuards } from '@nestjs/common';
 import { Event } from './event.model';
 import { EventService } from './event.service';
 import { JwtGuard } from 'src/auth/auth.guard';
-import { UserService } from 'src/user/user.service';
 import { User } from 'src/user/user.model';
 import { CurrentUser } from 'src/user/user.decorator';
 
 @Resolver(() => Event)
 export class EventResolver {
-  constructor(
-    private eventService: EventService,
-    private userService: UserService,
-  ) {}
+  constructor(private eventService: EventService) {}
 
   @Query(() => Event)
   @UseGuards(JwtGuard)
   async event(@Args('id') id: number): Promise<Event> {
-    const event = await this.eventService.getEvent(id);
-    const user = await this.userService.getUserById(event.userId);
-
-    return { ...event, createdBy: user };
+    return await this.eventService.getEvent(id);
   }
 
   @Query(() => [Event])
@@ -36,14 +29,16 @@ export class EventResolver {
   @UseGuards(JwtGuard)
   async createEvent(
     @Args('title') title: string,
-    @Args('description') description: string,
-    @Args('date') date: string,
+    @Args('description', { nullable: true }) description: string,
+    @Args('start', { nullable: true }) start: string,
+    @Args('end', { nullable: true }) end: string,
     @CurrentUser() user: User,
   ): Promise<Event> {
     const event = await this.eventService.createEvent({
       title,
       description,
-      date,
+      start,
+      end,
       userId: user.id,
     });
 

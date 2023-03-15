@@ -13,7 +13,7 @@ const Signup = () => {
   const { dispatch } = useUserContext();
 
   const [signup] = useMutation(SIGNUP_MUTATION, {
-    onError: (error) => console.log({ error }),
+    onError: (error) => console.error({ error }),
     onCompleted: (data) => authenticateUser(data.signup, dispatch),
   });
   const onSubmit = (formData) => {

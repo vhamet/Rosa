@@ -10,16 +10,23 @@ export class Event implements EventClient {
   @Field(() => String)
   createdAt: Date;
 
+  @Field(() => String)
+  title: string;
+
   @Field(() => String, {
     nullable: true,
   })
-  title: string;
-
-  @Field(() => String)
   description: string;
 
-  @Field(() => String)
-  date: Date;
+  @Field(() => String, {
+    nullable: true,
+  })
+  start: Date;
+
+  @Field(() => String, {
+    nullable: true,
+  })
+  end: Date;
 
   @Field(() => User)
   createdBy?: User;

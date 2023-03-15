@@ -1,7 +1,11 @@
 import { gql } from "@apollo/client";
-import EventItem from "../../components/events/EventItem";
+import Head from "next/head";
+import Link from "next/link";
+import EventItem from "../../components/EventItem";
 import withPrivateRouteHOC from "../../components/withPrivateRouteHOC";
 import { initializeApollo } from "../../services/apollo/apollo-client";
+
+import styles from "./events.module.scss";
 
 const EVENTS_QUERY = gql`
   query {
@@ -9,7 +13,9 @@ const EVENTS_QUERY = gql`
       id
       title
       description
-      date
+      start
+      end
+      createdAt
       createdBy {
         username
       }
@@ -43,14 +49,22 @@ export const getServerSideProps = async (context) => {
 
 const Events = ({ events }) => {
   return (
-    <>
-      <h1>Events list</h1>
+    <div className={styles.events}>
+      <Head>
+        <title>Events | Rosa</title>
+        <meta name="viewport" content="initial-scale=1.0, width=device-width" />
+      </Head>
+
+      <div className={styles.events__header}>
+        <h1>Upcoming events</h1>
+        <Link href="/events/create">Create new event</Link>
+      </div>
       <div>
         {events.map((event) => (
           <EventItem key={event.id} event={event} />
         ))}
       </div>
-    </>
+    </div>
   );
 };
 
