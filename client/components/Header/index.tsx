@@ -6,9 +6,8 @@ import {
   faRightToBracket,
   faPenToSquare,
 } from "@fortawesome/free-solid-svg-icons";
-import useUserContext, {
-  UserReducerActions,
-} from "../../services/authentication/user-context";
+import useUserContext from "../../services/authentication/user-context";
+import { signout } from "../../services/authentication/utils";
 
 import styles from "./Header.module.scss";
 
@@ -30,10 +29,7 @@ const Header = () => {
       <div>
         {initialized &&
           (auth ? (
-            <div
-              className="link"
-              onClick={() => dispatch({ type: UserReducerActions.signout })}
-            >
+            <div className="link" onClick={() => signout(dispatch)}>
               <FontAwesomeIcon icon={faRightFromBracket} /> SIGNOUT
             </div>
           ) : (
