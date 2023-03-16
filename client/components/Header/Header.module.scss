@@ -1,8 +1,30 @@
+@import "../../styles/variables.scss";
+@import "../../styles/mixins.scss";
+
 .header {
   max-width: 100%;
-  padding: 1rem;
+  padding: 1rem 2rem;
   position: sticky;
   display: flex;
   align-items: center;
   justify-content: space-between;
+  background-color: white;
+  box-shadow: 0 -6px 10px 5px $black-darkest;
+
+  &__logo {
+    font-size: 2rem;
+    font-weight: 700;
+
+    a {
+      @include link;
+    }
+  }
+
+  &__authentication {
+    display: flex;
+
+    a:last-child {
+      margin-left: 1rem;
+    }
+  }
 }

@@ -1,8 +1,8 @@
-import { GetStaticPaths, GetStaticProps } from "next";
 import { useRouter } from "next/router";
-import { gql, useQuery } from "@apollo/client";
+import { gql } from "@apollo/client";
 
 import { initializeApollo } from "../../services/apollo/apollo-client";
+import Head from "next/head";
 
 const EVENT_QUERY = gql`
   query Event($id: Float!) {
@@ -45,22 +45,20 @@ export const getServerSideProps = async (context) => {
   };
 };
 
-// export const getStaticPaths: GetStaticPaths<{ slug: string }> = async () => {
-//   return {
-//     paths: [], //indicates that no page needs be created at build time
-//     fallback: "blocking", //indicates the type of fallback
-//   };
-//};
-
 const EventDetail = ({ event }) => {
   const router = useRouter();
   const id = router.query.id;
 
   return (
-    <>
-      <h1>Event {id}</h1>
-      {event.title}
-    </>
+    <div>
+      <Head>
+        <title>{`${event.title} | Rosa`}</title>
+        <meta name="viewport" content="initial-scale=1.0, width=device-width" />
+      </Head>
+
+      <div>{event.title}</div>
+      <div>{event.description}</div>
+    </div>
   );
 };
 

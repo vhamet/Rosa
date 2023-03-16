@@ -1,5 +1,11 @@
 import Link from "next/link";
 import { useEffect, useState } from "react";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import {
+  faRightFromBracket,
+  faRightToBracket,
+  faPenToSquare,
+} from "@fortawesome/free-solid-svg-icons";
 import useUserContext, {
   UserReducerActions,
 } from "../../services/authentication/user-context";
@@ -18,17 +24,26 @@ const Header = () => {
 
   return (
     <div className={styles.header}>
-      <div>Rosa</div>
+      <div className={styles.header__logo}>
+        <Link href="/">Rosa</Link>
+      </div>
       <div>
         {initialized &&
           (auth ? (
-            <div onClick={() => dispatch({ type: UserReducerActions.signout })}>
-              SIGNOUT
+            <div
+              className="link"
+              onClick={() => dispatch({ type: UserReducerActions.signout })}
+            >
+              <FontAwesomeIcon icon={faRightFromBracket} /> SIGNOUT
             </div>
           ) : (
-            <div>
-              <Link href="/signin">Sign in</Link>
-              <Link href="/signup">Sign up</Link>
+            <div className={styles.header__authentication}>
+              <Link className="link" href="/signin">
+                <FontAwesomeIcon icon={faRightToBracket} /> SIGNIN
+              </Link>
+              <Link className="link" href="/signup">
+                <FontAwesomeIcon icon={faPenToSquare} /> SIGNUP
+              </Link>
             </div>
           ))}
       </div>

@@ -1,0 +1,51 @@
+@import "../../styles/variables.scss";
+
+.form-input {
+  display: flex;
+  flex-direction: column;
+
+  &__labels {
+    padding: 0 0.125rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    span {
+      font-size: 0.825rem;
+      color: $danger;
+    }
+  }
+
+  input {
+    height: 2rem;
+    padding: 0.5rem 1rem;
+    border-radius: 8px;
+    outline: none;
+    background-color: white;
+    border-color: $orange-darkest;
+
+    &:autofill, &:-webkit-autofill {
+      background-color: white;
+      -webkit-box-shadow: 0 0 0px 1000px white inset;
+    }
+    
+    &:focus {
+      background-color: $orange-lightest;
+    }
+  }
+
+  &__error {
+    label {
+      color: $danger;
+    }
+
+    input {
+      background-color: $danger-lighter;
+      border-color: $danger-darker;
+
+      &:focus {
+        background-color: $danger-lightest;
+      }
+    }
+  }
+}

@@ -1,5 +1,8 @@
 import { useForm } from "react-hook-form";
-import FormInput from "./Form/FormInput";
+import Button from "../Button";
+import FormInput from "../Form/FormInput";
+
+import styles from "./AuthenticationForm.module.scss";
 
 const AuthenticationForm = ({ onSubmit, actionLabel = "Confirm" }) => {
   const {
@@ -9,7 +12,10 @@ const AuthenticationForm = ({ onSubmit, actionLabel = "Confirm" }) => {
   } = useForm();
 
   return (
-    <form className="authentication-form" onSubmit={handleSubmit(onSubmit)}>
+    <form
+      className={styles["authentication-form"]}
+      onSubmit={handleSubmit(onSubmit)}
+    >
       <FormInput
         name="username"
         label="Username"
@@ -25,7 +31,7 @@ const AuthenticationForm = ({ onSubmit, actionLabel = "Confirm" }) => {
         register={register}
         options={{ required: true }}
       />
-      <button>Sign in !</button>
+      <Button label={actionLabel} />
     </form>
   );
 };

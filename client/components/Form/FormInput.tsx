@@ -7,6 +7,8 @@ import {
   RegisterOptions,
 } from "react-hook-form";
 
+import styles from "./FormInput.module.scss";
+
 type FormInputProps = {
   name: string;
   label: string;
@@ -25,12 +27,18 @@ const FormInput = ({
   options,
 }: FormInputProps) => {
   return (
-    <div className="form-input">
-      {label && <label>{label}</label>}
+    <div
+      className={`${styles["form-input"]} ${
+        error ? styles["form-input__error"] : ""
+      }`}
+    >
+      <div className={styles["form-input__labels"]}>
+        {label && <label>{label}</label>}
+        {error && (
+          <span>{error.message.toString() || "This field is required"}</span>
+        )}
+      </div>
       <input type={type || "text"} {...register(name, options)} />
-      {error && (
-        <span>{error.message.toString() || "This field is required"}</span>
-      )}
     </div>
   );
 };

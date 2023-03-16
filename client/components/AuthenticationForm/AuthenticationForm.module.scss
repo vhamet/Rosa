@@ -1,0 +1,19 @@
+@import "../../styles/variables.scss";
+
+.authentication-form {
+  display: flex;
+  flex-direction: column;
+
+  h1 {
+    color: $black-darkest;
+  }
+
+  > div {
+    margin-bottom: 2rem;
+  }
+
+  button {
+    min-width: 33%;
+    align-self: center;
+  }
+}

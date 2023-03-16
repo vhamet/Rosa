@@ -1,0 +1,14 @@
+@import "../../styles/variables.scss";
+
+.button {
+  padding: 1rem 1.5rem;
+  color: $orange-darkest;
+  background-color: $orange-lightest;
+  border-radius: 8px;
+  border-color: $orange-darkest;
+  cursor: pointer;
+
+  &:focus, &:hover {
+    background-color: $orange-lighter;
+  }
+}

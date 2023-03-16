@@ -6,7 +6,7 @@ type Event = {
   createdBy: { username: string };
 };
 
-type EventProps = { event: Event };
+type EvenItemtProps = { event: Event };
 
 const EventItem = ({
   event: {
@@ -16,7 +16,7 @@ const EventItem = ({
     date,
     createdBy: { username },
   },
-}: EventProps) => {
+}: EvenItemtProps) => {
   return (
     <div className="event-item">
       <div>

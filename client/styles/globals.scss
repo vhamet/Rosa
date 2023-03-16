@@ -1,0 +1,15 @@
+@import "./variables.scss";
+@import "./mixins.scss";
+
+body {
+  background-color: $colonies-background;
+}
+
+h1 {
+  margin: 0;
+  padding: 0;
+}
+
+a, .link {
+  @include link;
+}

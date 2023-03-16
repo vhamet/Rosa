@@ -1,0 +1,10 @@
+@mixin link {
+  color: $green;
+  text-decoration: none;
+  transition: color 0.3s ease;
+  cursor: pointer;
+
+  &:hover {
+    color: $green-darker;
+  }
+}
