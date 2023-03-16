@@ -1,14 +1,27 @@
 @import "../../styles/variables.scss";
 
 .button {
-  padding: 1rem 1.5rem;
-  color: $orange-darkest;
-  background-color: $orange-lightest;
-  border-radius: 8px;
-  border-color: $orange-darkest;
-  cursor: pointer;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 
-  &:focus, &:hover {
-    background-color: $orange-lighter;
+  &__action {
+    padding: 1rem 1.5rem;
+    font-weight: 700;
+    color: $orange-darkest;
+    background-color: $orange-lightest;
+    border-radius: 8px;
+    border-color: $orange-darkest;
+    border-style: groove;
+    cursor: pointer;
+    box-shadow: 0px 8px 15px #aaaaaa44;
+    transition: all 0.3s ease 0s;
+
+    &:focus, &:hover {
+      background-color: $orange-lighter;
+      box-shadow: 0px 15px 20px #cccccc44;
+      transform: translateY(-3px);
+    }
   }
 }

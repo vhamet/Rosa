@@ -6,9 +6,11 @@ type ButtonProps = {
 };
 
 const Button = ({ onClick = () => {}, label }: ButtonProps) => (
-  <button onClick={onClick} className={styles.button}>
-    {label}
-  </button>
+  <div className={styles.button}>
+    <button onClick={onClick} className={styles.button__action}>
+      {label}
+    </button>
+  </div>
 );
 
 export default Button;
