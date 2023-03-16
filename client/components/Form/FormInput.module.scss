@@ -21,7 +21,7 @@
     padding: 0.5rem 1rem;
     border-radius: 8px;
     background-color: white;
-    border-color: $orange-darkest;
+    border-color: $green-darkest;
     border-style: groove;
     outline: none;
 
@@ -31,7 +31,7 @@
     }
     
     &:focus {
-      background-color: $orange-lightest;
+      background-color: $green-lightest;
     }
   }
 
