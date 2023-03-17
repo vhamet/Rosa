@@ -9,6 +9,8 @@
     display: flex;
     align-items: center;
     justify-content: space-between;
+    font-size: 1.125rem;
+    color: $black-darkest;
 
     span {
       font-size: 0.825rem;
@@ -18,12 +20,24 @@
 
   input {
     height: 2rem;
+  }
+
+  textarea {
+    height: 4rem;
+    resize: vertical;
+    max-width: 75vw;
+    border-width: 2px;
+  }
+
+  input, textarea {
     padding: 0.5rem 1rem;
     border-radius: 8px;
     background-color: white;
     border-color: $green-darkest;
     border-style: groove;
     outline: none;
+    font-family: inherit;
+    font-size: inherit;
 
     &:autofill, &:-webkit-autofill {
       background-color: white;

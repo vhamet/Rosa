@@ -1,6 +1,6 @@
 import { useForm } from "react-hook-form";
 import Button from "../Button";
-import FormInput from "../Form/FormInput";
+import FormInput from "../FormInput";
 
 import styles from "./AuthenticationForm.module.scss";
 

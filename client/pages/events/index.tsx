@@ -1,7 +1,7 @@
 import { gql } from "@apollo/client";
 import Head from "next/head";
-import Link from "next/link";
 import EventItem from "../../components/EventItem";
+import LinkButton from "../../components/LinkButton";
 import withPrivateRouteHOC from "../../components/withPrivateRouteHOC";
 import { initializeApollo } from "../../services/apollo/apollo-client";
 
@@ -57,7 +57,7 @@ const Events = ({ events }) => {
 
       <div className={styles.events__header}>
         <h1>Upcoming events</h1>
-        <Link href="/events/create">Create new event</Link>
+        <LinkButton to="/events/create" label="Create new event" />
       </div>
       <div>
         {events.map((event) => (

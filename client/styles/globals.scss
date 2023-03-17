@@ -8,8 +8,55 @@ body {
 h1 {
   margin: 0;
   padding: 0;
+  color: $black-darkest;
 }
 
 a, .link {
   @include link;
+}
+
+.react-datepicker {
+  font-family: inherit;
+
+  &__triangle {
+    display: none;
+  }
+
+  &__header {
+    background-color: $green !important;
+  }
+
+  &__navigation-icon {
+    border-color: $black;
+    
+    &:hover {
+      border-color: $black-darker;
+    }
+  }
+
+  &__current-month {
+    color: $black-darkest;
+  }
+
+  &__day-names {
+    color: $black-darker;
+  }
+
+  &__day {
+    border-radius: 25px !important;
+
+    &--today {
+      background: $green-lightest !important;
+    }
+
+    &--keyboard-selected,
+    &--selected {
+      background: $green !important;
+      color: white !important;
+      font-weight: 700;
+    }
+    &--disabled {
+      color: #c7c7c7 !important;
+    }
+  }
 }

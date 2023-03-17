@@ -1,3 +1,5 @@
+@import "./variables.scss";
+
 @mixin link {
   color: $green;
   text-decoration: none;
@@ -7,4 +9,23 @@
   &:hover {
     color: $green-darker;
   }
+}
+
+@mixin button {
+  padding: 1rem 1.5rem;
+    font-weight: 700;
+    color: white;
+    background-color: $green-darker;
+    border-radius: 8px;
+    border: none;
+    cursor: pointer;
+    box-shadow: 0px 8px 15px #cccccc44;
+    transition: all 0.3s ease 0s;
+
+    &:focus, &:hover {
+      background-color: $green-darkest;
+      box-shadow: 0px 15px 20px #eeeeee44;
+      transform: translateY(-3px);
+      color: white;
+    }
 }

@@ -5,18 +5,30 @@ import {
   Merge,
   FieldErrorsImpl,
   RegisterOptions,
+  Control,
 } from "react-hook-form";
+import DateInput from "../DateInput";
+import { RequireOnlyOne } from "../../utils/types";
 
 import styles from "./FormInput.module.scss";
 
-type FormInputProps = {
+interface FormInputInterface {
   name: string;
   label: string;
   error?: FieldError | Merge<FieldError, FieldErrorsImpl<any>>;
   type?: string;
   register: UseFormRegister<FieldValues>;
+  control?: Control<FieldValues, any>;
   options?: RegisterOptions;
-};
+  defaultValue?: any;
+  minDate?: Date;
+  withTime?: boolean;
+}
+
+type FormInputProps = RequireOnlyOne<
+  FormInputInterface,
+  "register" | "control"
+>;
 
 const FormInput = ({
   name,
@@ -24,8 +36,33 @@ const FormInput = ({
   error,
   type,
   register,
+  control,
   options,
+  defaultValue,
+  minDate,
+  withTime,
 }: FormInputProps) => {
+  let input;
+  switch (type) {
+    case "textarea":
+      input = <textarea {...register(name, options)} />;
+      break;
+    case "date":
+      input = (
+        <DateInput
+          name={name}
+          control={control}
+          defaultValue={defaultValue}
+          minDate={minDate}
+          withTime={withTime}
+        />
+      );
+      break;
+    default:
+      input = <input type={type || "text"} {...register(name, options)} />;
+      break;
+  }
+
   return (
     <div
       className={`${styles["form-input"]} ${
@@ -38,7 +75,7 @@ const FormInput = ({
           <span>{error.message.toString() || "This field is required"}</span>
         )}
       </div>
-      <input type={type || "text"} {...register(name, options)} />
+      {input}
     </div>
   );
 };
