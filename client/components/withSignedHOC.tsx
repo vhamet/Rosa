@@ -8,7 +8,7 @@ const withSignedHOC = (Component) => {
 
     if (auth) {
       if (typeof window !== "undefined") {
-        router.push("/events");
+        router.push("/events", null, { shallow: true });
       }
     }
 

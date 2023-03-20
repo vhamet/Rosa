@@ -59,7 +59,7 @@ const Events = ({ events }) => {
         <h1>Upcoming events</h1>
         <LinkButton to="/events/create" label="Create new event" />
       </div>
-      <div>
+      <div className={styles.events__grid}>
         {events.map((event) => (
           <EventItem key={event.id} event={event} />
         ))}

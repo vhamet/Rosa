@@ -60,3 +60,13 @@ a, .link {
     }
   }
 }
+
+.card.clickable {
+  cursor: pointer;
+  transition: all 0.3s ease 0s;
+
+  &:hover {
+    box-shadow: 0 9px 9px -5px $black;
+    transform: scale(1.005);
+  }
+}

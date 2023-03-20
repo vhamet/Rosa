@@ -1,7 +1,22 @@
+@import "../../styles/variables.scss";
+
 .create-event {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  &__back {
+    margin-bottom: 2rem;
+    display: block;
+    align-self: flex-start;
+    font-size: 1.5rem;
+  }
+
   h1 {
     margin-bottom: 2rem;
     text-align: center;
+    color: $orange;
   }
 
   &__form {

@@ -8,7 +8,7 @@ const withPrivateRouteHOC = (Component) => {
 
     if (!auth) {
       if (typeof window !== "undefined") {
-        router.push("/signin");
+        router.push("/signin", null, { shallow: true });
       }
     }
 

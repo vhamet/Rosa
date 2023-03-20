@@ -2,12 +2,15 @@ import { gql, useMutation } from "@apollo/client";
 import Head from "next/head";
 import { useRouter } from "next/router";
 import { useForm } from "react-hook-form";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faArrowLeft } from "@fortawesome/free-solid-svg-icons";
 import Button from "../../components/Button";
 import Card from "../../components/Card";
 import FormInput from "../../components/FormInput";
 import withPrivateRouteHOC from "../../components/withPrivateRouteHOC";
 
 import styles from "./create.module.scss";
+import Link from "next/link";
 
 const CREATE_EVENT = gql`
   mutation CreateEvent(
@@ -49,7 +52,8 @@ const NewEvent = () => {
 
   const [createEvent] = useMutation(CREATE_EVENT, {
     onError: (error) => console.error(error),
-    onCompleted: (data) => router.push(`/events/${data.createEvent.id}`),
+    onCompleted: (data) =>
+      router.push(`/events/${data.createEvent.id}`, null, { shallow: true }),
   });
   const onSubmit = (formData) => createEvent({ variables: formData });
 
@@ -59,6 +63,10 @@ const NewEvent = () => {
         <title>New event | Rosa</title>
         <meta name="viewport" content="initial-scale=1.0, width=device-width" />
       </Head>
+
+      <Link href="/events" className={styles["create-event__back"]}>
+        <FontAwesomeIcon icon={faArrowLeft} /> Events
+      </Link>
 
       <Card>
         <h1>New event</h1>
