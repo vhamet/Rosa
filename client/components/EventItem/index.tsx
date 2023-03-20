@@ -1,10 +1,13 @@
 import { useRouter } from "next/router";
-import { formatDate, formatEventDate } from "../../utils/dates";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faCalendar } from "@fortawesome/free-solid-svg-icons";
+
+import { formatEventDate, fromNow } from "../../utils/dates";
 import Card from "../Card";
 
 import styles from "./EventItem.module.scss";
 
-type Event = {
+export type Event = {
   id: number;
   title: string;
   description?: string;
@@ -29,16 +32,15 @@ const EventItem = ({
 }: EvenItemtProps) => {
   const router = useRouter();
 
-  console.log({ start, end });
   let date;
   if (!start && !end) {
-    date = "TDB";
+    date = "TBD";
   } else if (!end) {
     date = formatEventDate(start);
   } else {
     date = (
       <>
-        {formatEventDate(start)} <label>to</label> {formatEventDate(end)}
+        {formatEventDate(start)} <label>to&nbsp;</label> {formatEventDate(end)}
       </>
     );
   }
@@ -46,11 +48,14 @@ const EventItem = ({
   return (
     <Card onClick={() => router.push(`/events/${id}`, null, { shallow: true })}>
       <div className={styles["event-item"]}>
-        <div className={styles["event-item__date"]}>{date}</div>
+        <div className={styles["event-item__date"]}>
+          <FontAwesomeIcon icon={faCalendar} />
+          {date}
+        </div>
         <div className={styles["event-item__title"]}>{title}</div>
         <div className={styles["event-item__description"]}>{description}</div>
         <div className={styles["event-item__information"]}>
-          Created by {username} on {formatDate(createdAt)}
+          Created by {username} {fromNow(createdAt)}
         </div>
       </div>
     </Card>

@@ -5,3 +5,6 @@ export const formatEventDate = (date: string | number): string =>
 
 export const formatDate = (date: string | number): string =>
   moment(+date).format("DD/MM/yyyy [at] HH:mm");
+
+export const fromNow = (date: string | number): string =>
+  moment(+date).fromNow();

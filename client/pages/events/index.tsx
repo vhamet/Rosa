@@ -1,37 +1,66 @@
 import { gql } from "@apollo/client";
 import Head from "next/head";
+
 import EventItem from "../../components/EventItem";
 import LinkButton from "../../components/LinkButton";
+import Tabs from "../../components/Tabs";
 import withPrivateRouteHOC from "../../components/withPrivateRouteHOC";
+import { Event } from "../../components/EventItem";
 import { initializeApollo } from "../../services/apollo/apollo-client";
 
 import styles from "./events.module.scss";
 
-const EVENTS_QUERY = gql`
+const EVENT_TABS = {
+  PAST: "past",
+  UPCOMING: "upcoming",
+};
+
+const EVENT_CONTENT_FRAGMENT = gql`
+  fragment EventContentFragment on Event {
+    id
+    title
+    description
+    start
+    end
+    createdAt
+    createdBy {
+      username
+    }
+  }
+`;
+
+const PAST_EVENTS_QUERY = gql`
+  ${EVENT_CONTENT_FRAGMENT}
   query {
-    events {
-      id
-      title
-      description
-      start
-      end
-      createdAt
-      createdBy {
-        username
-      }
+    pastEvents {
+      ...EventContentFragment
+    }
+  }
+`;
+
+const UPCOMING_EVENTS_QUERY = gql`
+  ${EVENT_CONTENT_FRAGMENT}
+  query {
+    upcomingEvents {
+      ...EventContentFragment
     }
   }
 `;
 
 export const getServerSideProps = async (context) => {
-  let events = [];
+  let props = {};
   if (context) {
     const apolloClient = initializeApollo({ initialState: null, context });
     try {
+      const fetchUpcoming = context.query?.tab !== EVENT_TABS.PAST;
       const { data } = await apolloClient.query({
-        query: EVENTS_QUERY,
+        query: fetchUpcoming ? UPCOMING_EVENTS_QUERY : PAST_EVENTS_QUERY,
       });
-      events = data.events;
+      if (fetchUpcoming) {
+        props = { upcomingEvents: data.upcomingEvents };
+      } else {
+        props = { pastEvents: data.pastEvents };
+      }
     } catch (error) {
       const gqlError = error.graphQLErrors[0];
       if (gqlError) {
@@ -40,14 +69,39 @@ export const getServerSideProps = async (context) => {
     }
   }
 
-  return {
-    props: {
-      events,
-    },
-  };
+  return { props };
 };
 
-const Events = ({ events }) => {
+type EventsProps = {
+  pastEvents?: Event[];
+  upcomingEvents?: Event[];
+};
+
+const Events = ({ upcomingEvents, pastEvents }: EventsProps) => {
+  const tabsProps = [
+    {
+      id: "upcoming",
+      title: "Upcoming events",
+      content: (
+        <div className={styles.events__list}>
+          {upcomingEvents?.map((event) => (
+            <EventItem key={event.id} event={event} />
+          ))}
+        </div>
+      ),
+    },
+    {
+      id: "past",
+      title: "Past events",
+      content: (
+        <div className={styles.events__list}>
+          {pastEvents?.map((event) => (
+            <EventItem key={event.id} event={event} />
+          ))}
+        </div>
+      ),
+    },
+  ];
   return (
     <div className={styles.events}>
       <Head>
@@ -56,14 +110,9 @@ const Events = ({ events }) => {
       </Head>
 
       <div className={styles.events__header}>
-        <h1>Upcoming events</h1>
         <LinkButton to="/events/create" label="Create new event" />
       </div>
-      <div className={styles.events__grid}>
-        {events.map((event) => (
-          <EventItem key={event.id} event={event} />
-        ))}
-      </div>
+      <Tabs tabs={tabsProps} />
     </div>
   );
 };

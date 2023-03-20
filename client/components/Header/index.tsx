@@ -5,6 +5,7 @@ import {
   faRightFromBracket,
   faRightToBracket,
   faPenToSquare,
+  faCalendarWeek,
 } from "@fortawesome/free-solid-svg-icons";
 import useUserContext from "../../services/authentication/user-context";
 import { signout } from "../../services/authentication/utils";
@@ -27,21 +28,32 @@ const Header = () => {
         <Link href="/">Rosa</Link>
       </div>
       <div>
-        {initialized &&
-          (auth ? (
-            <div className="link" onClick={() => signout(dispatch)}>
-              <FontAwesomeIcon icon={faRightFromBracket} /> SIGNOUT
-            </div>
-          ) : (
-            <div className={styles.header__authentication}>
-              <Link className="link" href="/signin">
-                <FontAwesomeIcon icon={faRightToBracket} /> SIGNIN
-              </Link>
-              <Link className="link" href="/signup">
-                <FontAwesomeIcon icon={faPenToSquare} /> SIGNUP
-              </Link>
-            </div>
-          ))}
+        {initialized && (
+          <div className={styles.header__links}>
+            {auth ? (
+              <>
+                <Link className={`${styles.header__link} link`} href="/events">
+                  <FontAwesomeIcon icon={faCalendarWeek} /> EVENTS
+                </Link>
+                <div
+                  className={`${styles.header__link}} link`}
+                  onClick={() => signout(dispatch)}
+                >
+                  <FontAwesomeIcon icon={faRightFromBracket} /> SIGNOUT
+                </div>
+              </>
+            ) : (
+              <>
+                <Link className={`${styles.header__link} link`} href="/signin">
+                  <FontAwesomeIcon icon={faRightToBracket} /> SIGNIN
+                </Link>
+                <Link className={`${styles.header__link} link`} href="/signup">
+                  <FontAwesomeIcon icon={faPenToSquare} /> SIGNUP
+                </Link>
+              </>
+            )}{" "}
+          </div>
+        )}
       </div>
     </div>
   );

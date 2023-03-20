@@ -5,6 +5,7 @@
   text-decoration: none;
   transition: color 0.3s ease;
   cursor: pointer;
+  transition: all 0.3s ease 0s;
 
   &:hover {
     color: $green-darker;
@@ -19,12 +20,12 @@
     border-radius: 8px;
     border: none;
     cursor: pointer;
-    box-shadow: 0px 8px 15px #cccccc44;
+    box-shadow: 0px 8px 15px $green-darker;
     transition: all 0.3s ease 0s;
 
     &:focus, &:hover {
       background-color: $green-darkest;
-      box-shadow: 0px 15px 20px #eeeeee44;
+      box-shadow: 0px 15px 20px $green-darkest;
       transform: translateY(-3px);
       color: white;
     }

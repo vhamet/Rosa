@@ -25,6 +25,22 @@ export class EventResolver {
     return events.map((event) => ({ ...event }));
   }
 
+  @Query(() => [Event])
+  @UseGuards(JwtGuard)
+  async upcomingEvents(): Promise<Event[]> {
+    const events = await this.eventService.getUpcomingEvents();
+
+    return events.map((event) => ({ ...event }));
+  }
+
+  @Query(() => [Event])
+  @UseGuards(JwtGuard)
+  async pastEvents(): Promise<Event[]> {
+    const events = await this.eventService.getPastEvents();
+
+    return events.map((event) => ({ ...event }));
+  }
+
   @Mutation(() => Event)
   @UseGuards(JwtGuard)
   async createEvent(

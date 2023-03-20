@@ -1,0 +1,27 @@
+@import "../../styles/variables.scss";
+
+.tabs {
+  display: flex;
+  flex-direction: column;
+
+  &__header {
+    margin-bottom: 1.5rem;
+    display: flex;
+    border-bottom: 1px solid $green-darker;
+  }
+
+  &__tab {
+    padding: 0.3rem 1rem;
+    font-size: 1.25rem;
+    color: $green-darker;
+    cursor: pointer;
+
+    &.selected {
+      border-bottom: 3px solid $orange;
+    }
+  }
+
+  &__content {
+    align-self: center;
+  }
+}

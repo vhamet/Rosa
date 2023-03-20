@@ -5,6 +5,7 @@
   max-width: 100%;
   padding: 1rem 2rem;
   top: 0;
+  z-index: 10;
   position: sticky;
   display: flex;
   align-items: center;
@@ -15,17 +16,31 @@
   &__logo {
     font-size: 2rem;
     font-weight: 700;
+    text-shadow: $orange 3px 3px 1px;
 
     a {
       @include link;
+
+      &:hover {
+        text-shadow: $orange-darker 3px 3px 1px;
+      }
     }
   }
 
-  &__authentication {
+  &__links {
     display: flex;
 
-    a:last-child {
-      margin-left: 1rem;
+    >:not(:last-child) {
+      margin-right: 1rem;
+    }
+  }
+  
+  &__link {
+    display: flex;
+    align-items: baseline;
+
+    svg {
+      margin-right: 0.3rem;
     }
   }
 }

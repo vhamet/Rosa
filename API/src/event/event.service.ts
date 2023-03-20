@@ -46,4 +46,48 @@ export class EventService {
       },
     });
   }
+
+  async getUpcomingEvents(): Promise<Event[]> {
+    const now = new Date();
+    return this.prisma.event.findMany({
+      include: {
+        createdBy: SAFE_USER_FIELDS,
+      },
+      where: {
+        OR: [
+          { start: null, end: null },
+          {
+            start: { gte: now },
+          },
+          {
+            start: { lt: now },
+            end: { gt: now },
+          },
+        ],
+      },
+      orderBy: {
+        start: { sort: 'asc', nulls: 'last' },
+      },
+    });
+  }
+
+  async getPastEvents(): Promise<Event[]> {
+    return this.prisma.event.findMany({
+      include: {
+        createdBy: SAFE_USER_FIELDS,
+      },
+      where: {
+        OR: [
+          { end: { lt: new Date() } },
+          {
+            end: null,
+            start: { lt: new Date() },
+          },
+        ],
+      },
+      orderBy: {
+        start: { sort: 'desc' },
+      },
+    });
+  }
 }
