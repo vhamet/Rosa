@@ -3,13 +3,20 @@ import {
   createHttpLink,
   from,
   InMemoryCache,
+  NormalizedCacheObject,
 } from "@apollo/client";
 import { setContext } from "@apollo/client/link/context";
+import merge from "deepmerge";
 import Cookies from "js-cookie";
+import { useMemo } from "react";
+import isEqual from "lodash/isEqual";
+
 import { ACCESS_TOKEN } from "../../utils/const";
 import { isSSR } from "../../utils/utils";
 
-let apolloClient;
+export const APOLLO_STATE_PROP_NAME = "__APOLLO_STATE__";
+
+let apolloClient: ApolloClient<NormalizedCacheObject> | undefined;
 
 const httpLink = createHttpLink({ uri: "http://localhost:3000/graphql" });
 
@@ -34,18 +41,67 @@ const createApolloClient = (context) => {
   return new ApolloClient({
     ssrMode: typeof window === undefined,
     link: from([getAuthLink(context), httpLink]),
-    cache: new InMemoryCache(),
+    cache: new InMemoryCache({
+      typePolicies: {
+        User: {
+          keyFields: ["id"],
+        },
+        Event: {
+          keyFields: ["id"],
+        },
+      },
+    }),
   });
 };
 
-export const initializeApollo = ({ initialState = null, context = null }) => {
+type ApolloInitializationProps = {
+  initialState?: NormalizedCacheObject | null;
+  context?: any;
+};
+
+export const initializeApollo = ({
+  initialState = null,
+  context = null,
+}: ApolloInitializationProps) => {
   const _apolloClient = apolloClient ?? createApolloClient(context);
+
   if (initialState) {
     const existingCache = _apolloClient.extract();
-    _apolloClient.cache.restore({ ...existingCache, ...initialState });
+    const data = merge(initialState, existingCache, {
+      arrayMerge: (destinationArray, sourceArray) => [
+        ...sourceArray,
+        ...destinationArray.filter((d) =>
+          sourceArray.every((s) => !isEqual(d, s))
+        ),
+      ],
+    });
+
+    _apolloClient.cache.restore(data);
   }
-  if (isSSR()) return _apolloClient;
+
+  if (typeof window === "undefined") return _apolloClient;
+
   if (!apolloClient) apolloClient = _apolloClient;
 
   return _apolloClient;
+};
+
+export const addApolloState = (
+  client: ApolloClient<NormalizedCacheObject>,
+  pageProps: any
+) => {
+  if (pageProps?.props) {
+    pageProps.props[APOLLO_STATE_PROP_NAME] = client.cache.extract();
+  }
+
+  return pageProps;
+};
+
+export const useApollo = (pageProps: any) => {
+  const state = pageProps[APOLLO_STATE_PROP_NAME];
+  const store = useMemo(
+    () => initializeApollo({ initialState: state }),
+    [state]
+  );
+  return store;
 };

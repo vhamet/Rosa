@@ -7,7 +7,7 @@
   &__header {
     margin-bottom: 1.5rem;
     display: flex;
-    border-bottom: 1px solid $green-darker;
+    border-bottom: 1px solid $orange-darker;
   }
 
   &__tab {
@@ -17,6 +17,8 @@
     cursor: pointer;
 
     &.selected {
+      border-top-left-radius: 8px;
+      border-top-right-radius: 8px;
       border-bottom: 3px solid $orange;
     }
   }

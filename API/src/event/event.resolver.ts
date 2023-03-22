@@ -1,5 +1,5 @@
 import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
-import { UseGuards } from '@nestjs/common';
+import { NotFoundException, UseGuards } from '@nestjs/common';
 
 import { Event } from './event.model';
 import { EventService } from './event.service';
@@ -59,5 +59,39 @@ export class EventResolver {
     });
 
     return { ...event, createdBy: user };
+  }
+
+  @Mutation(() => User)
+  @UseGuards(JwtGuard)
+  async participate(
+    @Args('eventId') eventId: number,
+    @CurrentUser() user: User,
+  ): Promise<User> {
+    const event = await this.eventService.getEvent(eventId);
+    if (!event) {
+      throw new NotFoundException({
+        error: 'This event does not exists',
+      });
+    }
+    const participating = await this.eventService.participate(event, user);
+
+    return participating ? user : null;
+  }
+
+  @Mutation(() => User)
+  @UseGuards(JwtGuard)
+  async cancelParticipation(
+    @Args('eventId') eventId: number,
+    @CurrentUser() user: User,
+  ): Promise<User | null> {
+    const event = await this.eventService.getEvent(eventId);
+    if (!event) {
+      throw new NotFoundException({
+        error: 'This event does not exists',
+      });
+    }
+    const canceled = await this.eventService.cancelParticipation(event, user);
+
+    return canceled ? user : null;
   }
 }

@@ -14,3 +14,23 @@ export type RequireAtLeastOne<T, Keys extends keyof T = keyof T> = Pick<
   {
     [K in Keys]-?: Required<Pick<T, K>> & Partial<Pick<T, Exclude<Keys, K>>>;
   }[Keys];
+
+export type User = {
+  id: number;
+  createdAt: Date;
+  username: string;
+  phone?: string;
+  pictureUrl?: string;
+};
+
+export type Event = {
+  id: number;
+  title: string;
+  description?: string;
+  start: string;
+  end: string;
+  createdAt: string;
+  createdBy: User;
+  participants: User[];
+};
+export type EventItemProps = { event: Event };

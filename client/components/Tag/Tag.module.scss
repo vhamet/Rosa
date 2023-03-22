@@ -1,0 +1,26 @@
+@import "../../styles/variables.scss";
+
+.tag {
+  height: 1.6rem;
+  padding: 0.2rem 0.5rem;
+  display: flex;
+  align-items: center;
+  background-color: $orange-lightest;
+  border-radius: 8px;
+  box-shadow: 0 4px 4px -2px $black-lighter;
+  transition: all 0.3s ease 0s;
+
+  &:focus, &:hover {
+    background-color: $orange-lighter;
+    box-shadow: 0 4px 4px -2px $black;
+    transform: translateY(-1px);
+  }
+
+  &.clickable {
+    cursor: pointer;
+
+    * {
+      cursor: pointer;
+    }
+  }
+}

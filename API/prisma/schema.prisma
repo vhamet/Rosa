@@ -15,7 +15,11 @@ model User {
   phone       String?   @unique()
   password    String
 
-  events Event[]
+  eventsCreated Event[] @relation("eventsCreated")
+  participating Participating[]
+  comments Comment[]
+
+
 }
 
 model Event {
@@ -26,6 +30,30 @@ model Event {
   start DateTime?
   end DateTime?
 
-  createdBy   User @relation(fields: [userId], references: [id])
+  createdBy   User @relation(fields: [userId], references: [id], name: "eventsCreated")
   userId Int
+
+  participants Participating[]
+  comments Comment[]
+}
+
+model Participating {
+  event       Event     @relation(fields: [eventId], references: [id])
+  eventId     Int 
+  user   User @relation(fields: [userId], references: [id])
+  userId Int 
+  createdAt DateTime @default(now())
+
+  @@id([eventId, userId])
+}
+
+model Comment {
+  id         Int      @id @default(autoincrement())
+  content String
+
+  author   User @relation(fields: [userId], references: [id])
+  userId Int
+
+  event   Event @relation(fields: [eventId], references: [id])
+  eventId Int
 }

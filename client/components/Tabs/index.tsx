@@ -6,7 +6,7 @@ import styles from "./Tabs.module.scss";
 type Tab = {
   id: string;
   title: string;
-  content: ReactNode;
+  content?: ReactNode;
 };
 
 type TabsProps = {

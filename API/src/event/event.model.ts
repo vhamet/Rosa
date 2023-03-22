@@ -33,4 +33,7 @@ export class Event implements EventClient {
 
   @Field(() => Int)
   userId: number;
+
+  @Field(() => [User])
+  participants: User[];
 }

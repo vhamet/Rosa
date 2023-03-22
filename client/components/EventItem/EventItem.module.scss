@@ -6,26 +6,6 @@
   display: flex;
   flex-direction: column;
 
-
-  &__date {
-    display: flex;
-    align-items: baseline;
-    font-size: 0.825rem;
-    font-weight: 600;
-    color: $green-darkest;
-
-    svg {
-      margin-right: 0.3rem;
-      color: $orange;
-    }
-
-    label {
-      font-size: 0.75rem;
-      font-weight: normal;
-
-    }
-  }
-
   &__title {
     margin-bottom: 1.25rem;
     font-size: 1.75rem;

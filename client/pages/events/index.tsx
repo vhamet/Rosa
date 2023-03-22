@@ -5,8 +5,9 @@ import EventItem from "../../components/EventItem";
 import LinkButton from "../../components/LinkButton";
 import Tabs from "../../components/Tabs";
 import withPrivateRouteHOC from "../../components/withPrivateRouteHOC";
-import { Event } from "../../components/EventItem";
+
 import { initializeApollo } from "../../services/apollo/apollo-client";
+import { Event } from "../../utils/types";
 
 import styles from "./events.module.scss";
 
@@ -15,7 +16,7 @@ const EVENT_TABS = {
   UPCOMING: "upcoming",
 };
 
-const EVENT_CONTENT_FRAGMENT = gql`
+export const EVENT_CONTENT_FRAGMENT = gql`
   fragment EventContentFragment on Event {
     id
     title
@@ -24,6 +25,11 @@ const EVENT_CONTENT_FRAGMENT = gql`
     end
     createdAt
     createdBy {
+      id
+      username
+    }
+    participants {
+      id
       username
     }
   }

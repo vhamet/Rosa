@@ -10,7 +10,6 @@ import FormInput from "../../components/FormInput";
 import withPrivateRouteHOC from "../../components/withPrivateRouteHOC";
 
 import styles from "./create.module.scss";
-import Link from "next/link";
 
 const CREATE_EVENT = gql`
   mutation CreateEvent(
@@ -64,9 +63,12 @@ const NewEvent = () => {
         <meta name="viewport" content="initial-scale=1.0, width=device-width" />
       </Head>
 
-      <Link href="/events" className={styles["create-event__back"]}>
+      <div
+        onClick={() => router.push("/events")}
+        className={`${styles["create-event__back"]} link`}
+      >
         <FontAwesomeIcon icon={faArrowLeft} /> Events
-      </Link>
+      </div>
 
       <Card>
         <h1>New event</h1>

@@ -8,7 +8,8 @@ export enum UserReducerActions {
   signout = "signout",
 }
 
-type AuthenticationType = {
+export type AuthenticationType = {
+  id: number;
   username: string;
 };
 

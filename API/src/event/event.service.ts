@@ -1,6 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import * as moment from 'moment';
 import { PrismaService } from 'src/prisma.service';
+import { User } from 'src/user/user.model';
 import { EventCreateInput } from './event.input';
 import { Event } from './event.model';
 
@@ -19,7 +20,7 @@ export class EventService {
     end,
     userId,
   }: EventCreateInput): Promise<Event> {
-    return this.prisma.event.create({
+    const event = await this.prisma.event.create({
       data: {
         title,
         description,
@@ -27,31 +28,68 @@ export class EventService {
         end: moment(end, 'YYYY-MM-DD').toDate(),
         userId,
       },
+      include: {
+        participants: {
+          include: {
+            user: true,
+          },
+        },
+      },
     });
+
+    return {
+      ...event,
+      participants: event.participants.map(({ user }) => user),
+    };
   }
 
   async getEvent(id: number): Promise<Event> {
-    return this.prisma.event.findUnique({
+    const event = await this.prisma.event.findUnique({
       where: { id },
       include: {
         createdBy: SAFE_USER_FIELDS,
+        participants: {
+          include: {
+            user: true,
+          },
+        },
       },
     });
+
+    return {
+      ...event,
+      participants: event.participants.map(({ user }) => user),
+    };
   }
 
   async getEvents(): Promise<Event[]> {
-    return this.prisma.event.findMany({
+    const events = await this.prisma.event.findMany({
       include: {
         createdBy: SAFE_USER_FIELDS,
+        participants: {
+          include: {
+            user: true,
+          },
+        },
       },
     });
+
+    return events.map((event) => ({
+      ...event,
+      participants: event.participants.map(({ user }) => user),
+    }));
   }
 
   async getUpcomingEvents(): Promise<Event[]> {
     const now = new Date();
-    return this.prisma.event.findMany({
+    const events = await this.prisma.event.findMany({
       include: {
         createdBy: SAFE_USER_FIELDS,
+        participants: {
+          include: {
+            user: true,
+          },
+        },
       },
       where: {
         OR: [
@@ -69,12 +107,22 @@ export class EventService {
         start: { sort: 'asc', nulls: 'last' },
       },
     });
+
+    return events.map((event) => ({
+      ...event,
+      participants: event.participants.map(({ user }) => user),
+    }));
   }
 
   async getPastEvents(): Promise<Event[]> {
-    return this.prisma.event.findMany({
+    const events = await this.prisma.event.findMany({
       include: {
         createdBy: SAFE_USER_FIELDS,
+        participants: {
+          include: {
+            user: true,
+          },
+        },
       },
       where: {
         OR: [
@@ -89,5 +137,44 @@ export class EventService {
         start: { sort: 'desc' },
       },
     });
+
+    return events.map((event) => ({
+      ...event,
+      participants: event.participants.map(({ user }) => user),
+    }));
+  }
+
+  async participate(event: Event, user: User): Promise<boolean> {
+    try {
+      await this.prisma.participating.create({
+        data: {
+          eventId: event.id,
+          userId: user.id,
+        },
+      });
+    } catch (error) {
+      console.error(`Error adding participation:\n${error}`);
+      return false;
+    }
+
+    return true;
+  }
+
+  async cancelParticipation(event: Event, user: User): Promise<boolean> {
+    try {
+      await this.prisma.participating.delete({
+        where: {
+          eventId_userId: {
+            eventId: event.id,
+            userId: user.id,
+          },
+        },
+      });
+    } catch (error) {
+      console.error(`Error canceling participation:\n${error}`);
+      return false;
+    }
+
+    return true;
   }
 }
