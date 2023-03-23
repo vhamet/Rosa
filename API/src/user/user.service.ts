@@ -53,4 +53,12 @@ export class UserService {
 
     return safe ? this.userWithoutPassword(user) : user;
   }
+
+  async getUsers(): Promise<User[]> {
+    const users = await this.prisma.user.findMany({
+      orderBy: [{ username: 'asc' }],
+    });
+
+    return users.map((user) => this.userWithoutPassword(user));
+  }
 }

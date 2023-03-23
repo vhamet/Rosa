@@ -1,12 +1,16 @@
-import { gql } from "@apollo/client";
+import { gql, useQuery } from "@apollo/client";
 import Head from "next/head";
+import { useRouter } from "next/router";
 
 import EventItem from "../../components/EventItem";
 import LinkButton from "../../components/LinkButton";
 import Tabs from "../../components/Tabs";
 import withPrivateRouteHOC from "../../components/withPrivateRouteHOC";
 
-import { initializeApollo } from "../../services/apollo/apollo-client";
+import {
+  addApolloState,
+  initializeApollo,
+} from "../../services/apollo/apollo-client";
 import { Event } from "../../utils/types";
 
 import styles from "./events.module.scss";
@@ -65,7 +69,7 @@ const UPCOMING_EVENTS_QUERY = gql`
 export const getServerSideProps = async (context) => {
   let props = {};
   if (context) {
-    const apolloClient = initializeApollo({ initialState: null, context });
+    const apolloClient = initializeApollo({ context });
     try {
       const fetchUpcoming = context.query?.tab !== EVENT_TABS.PAST;
       const { data } = await apolloClient.query({
@@ -82,24 +86,33 @@ export const getServerSideProps = async (context) => {
         console.error({ error });
       }
     }
+
+    return addApolloState(apolloClient, { props });
+  }
+};
+
+const Events = () => {
+  const router = useRouter();
+  const { loading, error, data } = useQuery(
+    router.query.tab === EVENT_TABS.PAST
+      ? PAST_EVENTS_QUERY
+      : UPCOMING_EVENTS_QUERY
+  );
+
+  if (loading) {
+    return <p>Loading...</p>;
+  }
+  if (error) {
+    return <p>Error !</p>;
   }
 
-  return { props };
-};
-
-type EventsProps = {
-  pastEvents?: Event[];
-  upcomingEvents?: Event[];
-};
-
-const Events = ({ upcomingEvents, pastEvents }: EventsProps) => {
   const tabsProps = [
     {
       id: "upcoming",
       title: "Upcoming events",
       content: (
         <div className={styles.events__list}>
-          {upcomingEvents?.map((event) => (
+          {data?.upcomingEvents?.map((event) => (
             <EventItem key={event.id} event={event} />
           ))}
         </div>
@@ -110,7 +123,7 @@ const Events = ({ upcomingEvents, pastEvents }: EventsProps) => {
       title: "Past events",
       content: (
         <div className={styles.events__list}>
-          {pastEvents?.map((event) => (
+          {data?.pastEvents?.map((event) => (
             <EventItem key={event.id} event={event} />
           ))}
         </div>

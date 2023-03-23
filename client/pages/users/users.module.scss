@@ -1,0 +1,47 @@
+@import "../../styles/variables.scss";
+
+.users {
+
+  h1 {
+    margin-bottom: 1.5rem;
+    color: $orange;
+    text-align: center;
+  }
+  
+  table {
+    border-collapse: collapse;
+  }
+
+  tbody tr:not(:last-child) {
+    border-bottom: 1px solid $black-lighter;
+  }
+
+  &__user {
+    min-width: 60vw;
+    padding: 1rem 0.5rem;
+    display: flex;
+
+    img {
+      margin-right: 1rem;
+    }
+  }
+
+  &__name {
+    padding-top: 0.3rem;
+    display: flex;
+    flex-direction: column;
+
+    a {
+      font-size: 1.25rem;
+    }
+
+    label {
+      font-size: 0.875rem;
+
+      svg {
+        margin-right: 0.2rem;
+        color: $green-darker;
+      }
+    }
+  }
+}

@@ -1,4 +1,4 @@
-import { Query, Resolver } from '@nestjs/graphql';
+import { Args, Query, Resolver } from '@nestjs/graphql';
 import { UseGuards } from '@nestjs/common';
 
 import { User } from './user.model';
@@ -9,9 +9,15 @@ import { JwtGuard } from 'src/auth/auth.guard';
 export class UserResolver {
   constructor(private userService: UserService) {}
 
-  @Query(() => String)
+  @Query(() => User)
   @UseGuards(JwtGuard)
-  welcome(): string {
-    return 'Welcome to Rosa !';
+  async user(@Args('id') id: number): Promise<User> {
+    return await this.userService.getUserById(id);
+  }
+
+  @Query(() => [User])
+  @UseGuards(JwtGuard)
+  async users(): Promise<User[]> {
+    return await this.userService.getUsers();
   }
 }
