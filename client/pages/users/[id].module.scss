@@ -1,0 +1,51 @@
+@import "../../styles/variables.scss";
+
+.profile {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  &__back {
+    margin-bottom: 2rem;
+    display: block;
+    align-self: flex-start;
+    font-size: 1.5rem;
+  }
+
+  &__card {
+    min-width: 30vw;
+    display: flex;
+
+    > img {
+      margin-right: 1rem;
+    }
+  }
+
+  &__info {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+  }
+
+  &__name {
+    font-size: 1.5rem;
+  }
+
+  &__phone {
+    color: $black;
+    font-size: 0.875rem;
+
+    svg {
+      margin-right: 0.1rem;
+      color: $green-darker;
+    }
+  }
+
+  &__since {
+    margin-left: auto;
+    margin-top: 1rem;
+    font-size: 0.875rem;
+    font-style: italic;
+  }
+}

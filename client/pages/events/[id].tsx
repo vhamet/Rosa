@@ -15,10 +15,10 @@ import { fromNow } from "../../utils/dates";
 import { isEventOver } from "../../utils/utils";
 import { ACCESS_TOKEN } from "../../utils/const";
 import Participants from "./Participants";
+import Comments from "./Comments";
 import { EVENT_CONTENT_FRAGMENT } from ".";
 
 import styles from "./[id].module.scss";
-import Comments from "./Comments";
 
 const EVENT_QUERY = gql`
   ${EVENT_CONTENT_FRAGMENT}

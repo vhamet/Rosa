@@ -175,7 +175,7 @@
 
       svg {
         position: absolute;
-        right: 0.5rem;
+        right: 1rem;
         top: 50%;
         transform: translateY(-50%);
         color: $green;
@@ -183,7 +183,7 @@
 
         &:hover {
           color: $green-darker;
-          transform: translateY(-1px);
+          transform: translateY(-40%);
         }
       }
     }

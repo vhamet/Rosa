@@ -10,6 +10,11 @@
   &:hover {
     color: $green-darker;
   }
+
+  &.custom:hover {
+    color: inherit;
+    filter: brightness(85%);
+  }
 }
 
 @mixin button {

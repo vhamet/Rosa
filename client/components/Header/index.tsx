@@ -6,6 +6,7 @@ import {
   faRightToBracket,
   faPenToSquare,
   faCalendarWeek,
+  faUsers,
 } from "@fortawesome/free-solid-svg-icons";
 import useUserContext from "../../services/authentication/user-context";
 import { signout } from "../../services/authentication/utils";
@@ -32,6 +33,9 @@ const Header = () => {
           <div className={styles.header__links}>
             {auth ? (
               <>
+                <Link className={`${styles.header__link} link`} href="/users">
+                  <FontAwesomeIcon icon={faUsers} /> MEMBERS
+                </Link>
                 <Link className={`${styles.header__link} link`} href="/events">
                   <FontAwesomeIcon icon={faCalendarWeek} /> EVENTS
                 </Link>

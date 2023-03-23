@@ -15,6 +15,7 @@ model User {
   phone       String?   @unique()
   password    String
   pictureUrl  String?
+  color       String?
 
   eventsCreated Event[] @relation("eventsCreated")
   participating Participating[]

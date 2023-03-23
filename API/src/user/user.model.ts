@@ -27,5 +27,10 @@ export class User implements SafeUserClient {
   @Field(() => String, {
     nullable: true,
   })
+  color: string;
+
+  @Field(() => String, {
+    nullable: true,
+  })
   password?: string;
 }

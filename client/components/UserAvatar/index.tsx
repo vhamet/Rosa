@@ -5,6 +5,7 @@ export enum AvatarSize {
   small = "1.5rem",
   medium = "3rem",
   large = "4rem",
+  xlarge = "6rem",
 }
 
 type UserAvatarProps = {

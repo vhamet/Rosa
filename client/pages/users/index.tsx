@@ -22,6 +22,7 @@ const USERS_QUERY = gql`
       createdAt
       phone
       pictureUrl
+      color
     }
   }
 `;
@@ -59,12 +60,12 @@ const Users = () => {
   return (
     <div className={styles.users}>
       <Head>
-        <title>Users | Rosa</title>
+        <title>Members | Rosa</title>
         <meta name="viewport" content="initial-scale=1.0, width=device-width" />
       </Head>
 
       <Card classnames={styles.users__list}>
-        <h1>Rosa users</h1>
+        <h1>Members</h1>
         <table>
           <tbody>
             {data?.users.map((user) => (
@@ -72,7 +73,13 @@ const Users = () => {
                 <td className={styles.users__user}>
                   <UserAvatar user={user} size={AvatarSize.large} />
                   <div className={styles.users__name}>
-                    <Link href={`/users/${user.id}`}>{user.username}</Link>
+                    <Link
+                      href={`/users/${user.id}`}
+                      style={{ color: user.color }}
+                      className={user.color ? "custom" : "standard"}
+                    >
+                      {user.username}
+                    </Link>
                     <label>
                       <FontAwesomeIcon icon={faPhone} /> {user.phone || "N/A"}
                     </label>
