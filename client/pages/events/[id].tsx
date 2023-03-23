@@ -1,13 +1,9 @@
 import { useRouter } from "next/router";
 import Head from "next/head";
 import jwtDecode from "jwt-decode";
-import { gql, useMutation, useQuery } from "@apollo/client";
+import { gql, useQuery } from "@apollo/client";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import {
-  faArrowLeft,
-  faUserPlus,
-  faUserMinus,
-} from "@fortawesome/free-solid-svg-icons";
+import { faArrowLeft } from "@fortawesome/free-solid-svg-icons";
 
 import {
   initializeApollo,
@@ -16,37 +12,19 @@ import {
 import Card from "../../components/Card";
 import EventDate from "../../components/EventDate";
 import { fromNow } from "../../utils/dates";
-import UserTag from "../../components/UserTag";
-import IconButton from "../../components/IconButton";
+import { isEventOver } from "../../utils/utils";
 import { ACCESS_TOKEN } from "../../utils/const";
-import Tag from "../../components/Tag";
+import Participants from "./Participants";
 import { EVENT_CONTENT_FRAGMENT } from ".";
 
 import styles from "./[id].module.scss";
+import Comments from "./Comments";
 
 const EVENT_QUERY = gql`
   ${EVENT_CONTENT_FRAGMENT}
   query Event($id: Float!) {
     event(id: $id) {
       ...EventContentFragment
-    }
-  }
-`;
-
-const PARTICIPATE_MUTATION = gql`
-  mutation Participate($eventId: Float!) {
-    participate(eventId: $eventId) {
-      id
-      username
-    }
-  }
-`;
-
-const CANCEL_PARTICIPATION_MUTATION = gql`
-  mutation CancelParticipation($eventId: Float!) {
-    cancelParticipation(eventId: $eventId) {
-      id
-      username
     }
   }
 `;
@@ -82,42 +60,6 @@ const EventDetail = ({ auth }) => {
     variables: { id },
   });
 
-  const [participate] = useMutation(PARTICIPATE_MUTATION, {
-    variables: { eventId: id },
-    update: (cache, { data: { participate } }) => {
-      if (participate) {
-        cache.modify({
-          id: cache.identify(data?.event),
-          fields: {
-            participants(cachedParticipants) {
-              return [...cachedParticipants, participate];
-            },
-          },
-        });
-      }
-    },
-  });
-  const onParticipate = () => participate();
-  const [cancelParticipation] = useMutation(CANCEL_PARTICIPATION_MUTATION, {
-    variables: { eventId: id },
-    update: (cache, { data: { cancelParticipation } }) => {
-      if (cancelParticipation) {
-        cache.modify({
-          id: cache.identify(data?.event),
-          fields: {
-            participants(cachedParticipants, { readField }) {
-              return cachedParticipants.filter(
-                (participantRef) =>
-                  cancelParticipation.id !== readField("id", participantRef)
-              );
-            },
-          },
-        });
-      }
-    },
-  });
-  const onCancelParticipation = () => cancelParticipation();
-
   if (loading) {
     return <p>Loading...</p>;
   }
@@ -131,12 +73,11 @@ const EventDetail = ({ auth }) => {
       description,
       start,
       end,
-      participants,
+      comments,
       createdAt,
       createdBy: { username },
     },
   } = data;
-  const hasParticipants = participants.length > 0;
 
   return (
     <div className={styles["view-event"]}>
@@ -162,38 +103,13 @@ const EventDetail = ({ auth }) => {
         <div className={styles["view-event__title"]}>{title}</div>
         <div className={styles["view-event__description"]}>{description}</div>
 
-        <div className={styles["view-event__participants"]}>
-          <div className={styles["view-event__participants__title"]}>
-            Participants
-            <label className={styles["view-event__participants__count"]}>
-              {hasParticipants && `(${participants.length})`}
-            </label>
-          </div>
-          <div className={styles["view-event__participants__container"]}>
-            {hasParticipants ? (
-              participants.map((user) => (
-                <UserTag
-                  key={user.id}
-                  user={user}
-                  onClick={user.id === auth.id && cancelParticipation}
-                />
-              ))
-            ) : (
-              <div className={styles["view-event__participants__empty"]}>
-                No participant yet...
-              </div>
-            )}
-            {participants.every(({ id }) => auth.id !== id) && (
-              <Tag
-                onClick={onParticipate}
-                className={styles["view-event__participate"]}
-              >
-                <FontAwesomeIcon icon={faUserPlus} />
-                Participate
-              </Tag>
-            )}
-          </div>
-        </div>
+        <Participants
+          event={data?.event}
+          loggedId={auth.id}
+          eventOver={isEventOver(start, end)}
+        />
+
+        <Comments event={data?.event} comments={comments} loggedUser={auth} />
       </Card>
     </div>
   );

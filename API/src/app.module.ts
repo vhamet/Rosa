@@ -7,14 +7,16 @@ import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { UserModule } from './user/user.module';
 import { EventModule } from './event/event.module';
+import { CommentModule } from './comment/comment.module';
 
 @Module({
   imports: [
     UserModule,
     EventModule,
+    CommentModule,
     ConfigModule.forRoot({ isGlobal: true }),
     GraphQLModule.forRoot<ApolloDriverConfig>({
-      include: [UserModule, EventModule],
+      include: [UserModule, EventModule, CommentModule],
       driver: ApolloDriver,
       autoSchemaFile: true,
     }),

@@ -16,6 +16,8 @@ const EventItem = ({
     end,
     createdAt,
     createdBy: { username },
+    participants,
+    comments,
   },
 }: EventItemProps) => {
   const router = useRouter();
@@ -27,7 +29,12 @@ const EventItem = ({
         <div className={styles["event-item__title"]}>{title}</div>
         <div className={styles["event-item__description"]}>{description}</div>
         <div className={styles["event-item__information"]}>
-          Created by {username} {fromNow(createdAt)}
+          <div>
+            {participants.length} participants - {comments.length} comment
+          </div>
+          <div>
+            Created by {username} {fromNow(createdAt)}
+          </div>
         </div>
       </div>
     </Card>

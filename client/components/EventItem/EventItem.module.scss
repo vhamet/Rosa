@@ -20,7 +20,9 @@
   }
 
   &__information {
-    align-self: flex-end;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
     font-size: 0.75rem;
     color: $green-lighter;
     font-style: italic;

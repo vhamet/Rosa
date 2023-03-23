@@ -14,7 +14,8 @@ import styles from "./FormInput.module.scss";
 
 interface FormInputInterface {
   name: string;
-  label: string;
+  label?: string;
+  placeholder?: string;
   error?: FieldError | Merge<FieldError, FieldErrorsImpl<any>>;
   type?: string;
   register: UseFormRegister<FieldValues>;
@@ -33,6 +34,7 @@ type FormInputProps = RequireOnlyOne<
 const FormInput = ({
   name,
   label,
+  placeholder,
   error,
   type,
   register,
@@ -45,7 +47,9 @@ const FormInput = ({
   let input;
   switch (type) {
     case "textarea":
-      input = <textarea {...register(name, options)} />;
+      input = (
+        <textarea {...register(name, options)} placeholder={placeholder} />
+      );
       break;
     case "date":
       input = (
@@ -59,7 +63,13 @@ const FormInput = ({
       );
       break;
     default:
-      input = <input type={type || "text"} {...register(name, options)} />;
+      input = (
+        <input
+          type={type || "text"}
+          {...register(name, options)}
+          placeholder={placeholder}
+        />
+      );
       break;
   }
 

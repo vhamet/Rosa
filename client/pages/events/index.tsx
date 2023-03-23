@@ -32,6 +32,15 @@ export const EVENT_CONTENT_FRAGMENT = gql`
       id
       username
     }
+    comments {
+      id
+      content
+      createdAt
+      author {
+        id
+        username
+      }
+    }
   }
 `;
 

@@ -1,6 +1,7 @@
 import { ObjectType, Field, Int } from '@nestjs/graphql';
 import { Event as EventClient } from '@prisma/client';
 import { User } from 'src/user/user.model';
+import { Comment } from '../comment/comment.model';
 
 @ObjectType()
 export class Event implements EventClient {
@@ -36,4 +37,7 @@ export class Event implements EventClient {
 
   @Field(() => [User])
   participants: User[];
+
+  @Field(() => [Comment])
+  comments: User[];
 }

@@ -23,6 +23,13 @@ export type User = {
   pictureUrl?: string;
 };
 
+export type Comment = {
+  id: number;
+  createdAt: Date;
+  content: string;
+  author: User;
+};
+
 export type Event = {
   id: number;
   title: string;
@@ -32,5 +39,6 @@ export type Event = {
   createdAt: string;
   createdBy: User;
   participants: User[];
+  comments: Comment[];
 };
 export type EventItemProps = { event: Event };
