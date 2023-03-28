@@ -21,6 +21,7 @@ export type User = {
   username: string;
   phone?: string;
   pictureUrl?: string;
+  color?: string;
 };
 
 export type Comment = {

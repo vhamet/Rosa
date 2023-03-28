@@ -12,3 +12,21 @@ export class UserCreateInput {
   })
   password: string;
 }
+
+@InputType()
+export class UserUpdateInput {
+  @Field(() => String, {
+    nullable: false,
+  })
+  username: string;
+
+  @Field(() => String, {
+    nullable: true,
+  })
+  phone?: string;
+
+  @Field(() => String, {
+    nullable: true,
+  })
+  color?: string;
+}

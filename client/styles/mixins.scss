@@ -25,12 +25,12 @@
   border-radius: 8px;
   border: none;
   cursor: pointer;
-  box-shadow: 0px 8px 15px $green-darker;
+  box-shadow: 0px 4px 6px $green-darker;
   transition: all 0.3s ease 0s;
 
-  &:focus, &:hover {
+  &:hover {
     background-color: $green-darkest;
-    box-shadow: 0px 15px 20px $green-darkest;
+    box-shadow: 0px 8px 10px $green-darkest;
     transform: translateY(-3px);
     color: white;
   }

@@ -10,4 +10,15 @@
   &__action {
     @include button;
   }
+
+  &.secondary button {
+    background-color: $orange;
+    box-shadow: 0px 4px 6px $orange;
+
+    &:hover {
+      background-color: $orange-darker;
+      box-shadow: 0px 8px 10px $orange-darker;
+      color: white;
+    }
+  }
 }

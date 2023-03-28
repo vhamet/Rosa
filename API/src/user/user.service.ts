@@ -4,6 +4,12 @@ import { PrismaService } from '../prisma.service';
 import { UserCreateInput } from './user.input';
 import { User } from './user.model';
 
+type UpdateUserData = {
+  username: string;
+  phone?: string;
+  color?: string;
+};
+
 @Injectable()
 export class UserService {
   constructor(private prisma: PrismaService) {}
@@ -60,5 +66,16 @@ export class UserService {
     });
 
     return users.map((user) => this.userWithoutPassword(user));
+  }
+
+  async updateUser(idUser: number, userData: UpdateUserData): Promise<User> {
+    const updatedUser = await this.prisma.user.update({
+      where: {
+        id: idUser,
+      },
+      data: userData,
+    });
+
+    return this.userWithoutPassword(updatedUser);
   }
 }

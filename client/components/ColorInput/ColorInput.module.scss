@@ -1,0 +1,31 @@
+@import "../../styles/variables.scss";
+
+.color-input {
+  width: fit-content;
+  position: relative;
+
+  &__color {
+    height: 2rem;
+    width: 2rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-color: $green-darkest;
+    border-style: groove;
+    border-width: 2px;
+    border-radius: 8px;
+    cursor: pointer;
+
+    &-content {
+      height: calc(2rem - 4px);
+      width: calc(2rem - 4px);
+      border-radius: 6px;
+    }
+  }
+
+  &__picker  {
+    position: absolute;
+    bottom: 0;
+    left: calc(2rem + 8px);
+  }
+}

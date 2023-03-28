@@ -6,11 +6,13 @@ import {
   FieldErrorsImpl,
   RegisterOptions,
   Control,
+  UseFormSetValue,
 } from "react-hook-form";
 import DateInput from "../DateInput";
 import { RequireOnlyOne } from "../../utils/types";
 
 import styles from "./FormInput.module.scss";
+import ColorInput from "../ColorInput";
 
 interface FormInputInterface {
   name: string;
@@ -21,6 +23,7 @@ interface FormInputInterface {
   register: UseFormRegister<FieldValues>;
   control?: Control<FieldValues, any>;
   options?: RegisterOptions;
+  setValue?: UseFormSetValue<FieldValues>;
   defaultValue?: any;
   minDate?: Date;
   withTime?: boolean;
@@ -40,6 +43,7 @@ const FormInput = ({
   register,
   control,
   options,
+  setValue,
   defaultValue,
   minDate,
   withTime,
@@ -62,12 +66,24 @@ const FormInput = ({
         />
       );
       break;
+    case "color":
+      input = (
+        <ColorInput
+          name={name}
+          register={register}
+          defaultValue={defaultValue}
+          options={options}
+          setValue={setValue}
+        />
+      );
+      break;
     default:
       input = (
         <input
           type={type || "text"}
           {...register(name, options)}
           placeholder={placeholder}
+          defaultValue={defaultValue}
         />
       );
       break;

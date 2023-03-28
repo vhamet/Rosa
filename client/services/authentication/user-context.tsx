@@ -6,6 +6,7 @@ import { ACCESS_TOKEN } from "../../utils/const";
 export enum UserReducerActions {
   signin = "signin",
   signout = "signout",
+  update = "update",
 }
 
 export type AuthenticationType = {
@@ -15,7 +16,8 @@ export type AuthenticationType = {
 
 type AuthenticationActionType =
   | { type: UserReducerActions.signin; payload: AuthenticationType }
-  | { type: UserReducerActions.signout };
+  | { type: UserReducerActions.signout }
+  | { type: UserReducerActions.update; payload: AuthenticationType };
 
 export type UserContextType = {
   auth: AuthenticationType;
@@ -28,6 +30,8 @@ const reducer = (state: UserContextType, action: AuthenticationActionType) => {
       return { ...state, auth: action.payload };
     case UserReducerActions.signout:
       return { ...state, auth: null };
+    case UserReducerActions.update:
+      return { ...state, auth: { ...state.auth, ...action.payload } };
     default:
       throw new Error();
   }
