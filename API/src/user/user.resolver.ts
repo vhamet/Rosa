@@ -9,7 +9,7 @@ import {
 import { User } from './user.model';
 import { UserService } from './user.service';
 import { JwtGuard } from 'src/auth/auth.guard';
-import { CurrentUser } from './user.decorator';
+import { CurrentGqlUser } from './user.decorator';
 import { UserUpdateInput } from './user.input';
 
 @Resolver(() => User)
@@ -33,7 +33,7 @@ export class UserResolver {
   async updateProfile(
     @Args('userId') userId: number,
     @Args('userData') userData: UserUpdateInput,
-    @CurrentUser() currentUser: User,
+    @CurrentGqlUser() currentUser: User,
   ): Promise<User> {
     const user = await this.userService.getUserById(userId);
     if (!user) {
@@ -47,7 +47,7 @@ export class UserResolver {
     const { username, phone, color } = userData;
     if (user.username !== username) {
       const checkUser = await this.userService.getUserByUsername(username);
-      if (checkUser.id !== user.id) {
+      if (checkUser && checkUser.id !== user.id) {
         throw new ConflictException(`Username '${username}' is already used`);
       }
     }

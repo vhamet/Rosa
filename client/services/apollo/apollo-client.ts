@@ -18,7 +18,9 @@ export const APOLLO_STATE_PROP_NAME = "__APOLLO_STATE__";
 
 let apolloClient: ApolloClient<NormalizedCacheObject> | undefined;
 
-const httpLink = createHttpLink({ uri: "http://localhost:3000/graphql" });
+const httpLink = createHttpLink({
+  uri: `${process.env.NEXT_PUBLIC_URL_SERVER}/graphql`,
+});
 
 const getLocalToken = () => Cookies.get(ACCESS_TOKEN);
 

@@ -3,12 +3,14 @@
 **/dist
 **/yarn.lock
 **/migrations
+/API/public
 .env
 
 ### Client ###
 # dependencies
 /client/.pnp
 .pnp.js
+**/todo.txt
 
 # testing
 /client/coverage

@@ -11,16 +11,29 @@ export enum AvatarSize {
 type UserAvatarProps = {
   user: User;
   size?: AvatarSize;
+  preview?: string;
 };
 
-const UserAvatar = ({ user, size = AvatarSize.small }: UserAvatarProps) => (
-  <img
+const UserAvatar = ({
+  user,
+  size = AvatarSize.small,
+  preview,
+}: UserAvatarProps) => (
+  <div
     className={styles["user-avatar"]}
-    src={user.pictureUrl || "/default_profile_picture.jpeg"}
-    alt={`${user.username}_avatar`}
     title={user.username}
-    style={{ height: size, width: size }}
-  />
+    style={{ height: size, width: size, minHeight: size, minWidth: size }}
+  >
+    <img
+      src={
+        preview ||
+        (user.pictureUrl
+          ? `${process.env.NEXT_PUBLIC_URL_SERVER}${user.pictureUrl}`
+          : "/default_profile_picture.jpeg")
+      }
+      alt={`${user.username}_avatar`}
+    />
+  </div>
 );
 
 export default UserAvatar;

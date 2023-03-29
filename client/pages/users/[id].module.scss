@@ -1,4 +1,5 @@
 @import "../../styles/variables.scss";
+@import "../../styles/mixins.scss";
 
 .profile {
   width: 100%;
@@ -19,8 +20,9 @@
 
   &__container {
     display: flex;
+    justify-content: space-between;
 
-    > img {
+    > div {
       margin-right: 1rem;
     }
   }
@@ -68,6 +70,45 @@
 .update-profile {
   > div {
     margin-bottom: 1rem;
+  }
+
+  &__image {
+    display: flex;
+    align-items: center;
+
+    input {
+      margin-left: 1rem;
+    }
+  }
+
+  &__file {
+    font-family: inherit;
+
+
+    &::-webkit-file-upload-button {
+      display: none;
+    }
+
+    &::before {
+      content: 'Select profile picture';
+      margin-right: 0.5rem;
+      display: inline-block;
+      padding: 0.5rem;
+      font-weight: 400;
+      color: white;
+      background-color: $green-darker;
+      border-radius: 8px;
+      border: none;
+      cursor: pointer;
+    }
+    &:hover::before {
+      background-color: $green-darkest;
+      color: white;
+    }
+    &:active::before {
+      background-color: $green-darkest;
+      color: white;
+    }
   }
 
   &__actions {

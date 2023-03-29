@@ -5,7 +5,7 @@ import { Event } from './event.model';
 import { EventService } from './event.service';
 import { JwtGuard } from 'src/auth/auth.guard';
 import { User } from 'src/user/user.model';
-import { CurrentUser } from 'src/user/user.decorator';
+import { CurrentGqlUser } from 'src/user/user.decorator';
 
 @Resolver(() => Event)
 export class EventResolver {
@@ -48,7 +48,7 @@ export class EventResolver {
     @Args('description', { nullable: true }) description: string,
     @Args('start', { nullable: true }) start: string,
     @Args('end', { nullable: true }) end: string,
-    @CurrentUser() user: User,
+    @CurrentGqlUser() user: User,
   ): Promise<Event> {
     const event = await this.eventService.createEvent({
       title,
@@ -65,7 +65,7 @@ export class EventResolver {
   @UseGuards(JwtGuard)
   async participate(
     @Args('eventId') eventId: number,
-    @CurrentUser() user: User,
+    @CurrentGqlUser() user: User,
   ): Promise<User> {
     const event = await this.eventService.getEvent(eventId);
     if (!event) {
@@ -82,7 +82,7 @@ export class EventResolver {
   @UseGuards(JwtGuard)
   async cancelParticipation(
     @Args('eventId') eventId: number,
-    @CurrentUser() user: User,
+    @CurrentGqlUser() user: User,
   ): Promise<User | null> {
     const event = await this.eventService.getEvent(eventId);
     if (!event) {

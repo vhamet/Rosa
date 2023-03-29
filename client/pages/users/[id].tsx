@@ -5,6 +5,7 @@ import jwtDecode from "jwt-decode";
 import { gql, useMutation, useQuery } from "@apollo/client";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faArrowLeft } from "@fortawesome/free-solid-svg-icons";
+import Cookies from "js-cookie";
 
 import {
   initializeApollo,
@@ -19,12 +20,15 @@ import { ACCESS_TOKEN } from "../../utils/const";
 import useUserContext, {
   UserReducerActions,
 } from "../../services/authentication/user-context";
+import { User } from "../../utils/types";
 
 import styles from "./[id].module.scss";
 
 export type ProfileData = {
   username: string;
   phone?: string;
+  color?: string;
+  picture?: File;
 };
 
 const USER_QUERY = gql`
@@ -47,9 +51,28 @@ const UPDATE_PROFILE_MUTATION = gql`
       username
       phone
       color
+      pictureUrl
     }
   }
 `;
+
+const updateProfilePicture = async (picture: File): Promise<User> => {
+  const body = new FormData();
+  body.append("file", picture);
+  const token = Cookies.get(ACCESS_TOKEN);
+  const result = await fetch(
+    `${process.env.NEXT_PUBLIC_URL_SERVER}/user/uploadProfilePicture`,
+    {
+      method: "POST",
+      headers: {
+        authorization: token ? `Bearer ${token}` : "",
+      },
+      body,
+    }
+  );
+
+  return await result.json();
+};
 
 export const getServerSideProps = async (context) => {
   let user, auth;
@@ -92,9 +115,13 @@ const User = ({ auth }) => {
       });
       setUpdating(false);
     },
+    onError: (error) => console.error({ error }),
   });
-  const onModify = (formData: ProfileData) =>
-    updateProfile({ variables: { userId: id, userData: formData } });
+  const onModify = async (formData: ProfileData) => {
+    const { picture, ...userData } = formData;
+    await updateProfilePicture(picture);
+    updateProfile({ variables: { userId: id, userData } });
+  };
 
   if (loading) {
     return <p>Loading...</p>;
