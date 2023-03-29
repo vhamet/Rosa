@@ -1,0 +1,21 @@
+@import "../../styles/variables.scss";
+
+.header-menu {
+  position: relative;
+
+  &__content {
+    padding: 1rem 1.5rem;
+    position: absolute;
+    right: 0;
+    top: 2rem;
+    background: white;
+    border-radius: 8px;
+    box-shadow: 0 0 3px $black-lighter;
+
+    > * {
+      &:not(:last-child) {
+        margin-bottom: 1rem;
+      }
+    }
+  }
+}

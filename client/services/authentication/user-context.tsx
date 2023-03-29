@@ -12,6 +12,8 @@ export enum UserReducerActions {
 export type AuthenticationType = {
   id: number;
   username: string;
+  color?: string;
+  pictureUrl?: string;
 };
 
 type AuthenticationActionType =

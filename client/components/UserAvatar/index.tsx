@@ -2,6 +2,7 @@ import { User } from "../../utils/types";
 import styles from "./UserAvatar.module.scss";
 
 export enum AvatarSize {
+  xsmall = "1rem",
   small = "1.5rem",
   medium = "3rem",
   large = "4rem",

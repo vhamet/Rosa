@@ -104,7 +104,7 @@ export class UserService {
       unlink(
         path.join(__dirname, '..', '..', pictureUrl),
         (err) =>
-          err && console.log(`Error removing picture ${pictureUrl}:\n${err}`),
+          err && console.error(`Error removing picture ${pictureUrl}:\n${err}`),
       );
     }
 

@@ -13,6 +13,11 @@
   background-color: white;
   box-shadow: 0 -6px 10px 5px $black-darkest;
 
+  svg {
+    height: 16px;
+    width: 16px;
+  }
+
   &__logo {
     font-size: 2rem;
     font-weight: 700;
@@ -40,7 +45,20 @@
     align-items: baseline;
 
     svg {
+      margin-right: 0.5rem;
+    }
+  }
+
+  &__profile {
+    display: flex;
+    align-items: center;
+    
+    > div:first-child {
       margin-right: 0.3rem;
+    }
+
+    &:hover > div:first-child {
+      filter: brightness(0.95);
     }
   }
 }

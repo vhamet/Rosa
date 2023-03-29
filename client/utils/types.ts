@@ -17,8 +17,8 @@ export type RequireAtLeastOne<T, Keys extends keyof T = keyof T> = Pick<
 
 export type User = {
   id: number;
-  createdAt: Date;
   username: string;
+  createdAt?: Date;
   phone?: string;
   pictureUrl?: string;
   color?: string;

@@ -7,11 +7,15 @@ import {
   faPenToSquare,
   faCalendarWeek,
   faUsers,
+  faUser,
 } from "@fortawesome/free-solid-svg-icons";
+
+import HeaderMenu from "../HeaderMenu";
 import useUserContext from "../../services/authentication/user-context";
 import { signout } from "../../services/authentication/utils";
 
 import styles from "./Header.module.scss";
+import UserAvatar, { AvatarSize } from "../UserAvatar";
 
 const Header = () => {
   const { auth, dispatch } = useUserContext();
@@ -39,12 +43,29 @@ const Header = () => {
                 <Link className={`${styles.header__link} link`} href="/events">
                   <FontAwesomeIcon icon={faCalendarWeek} /> EVENTS
                 </Link>
-                <div
-                  className={`${styles.header__link}} link`}
-                  onClick={() => signout(dispatch)}
+                <HeaderMenu
+                  header={
+                    <div className={`${styles.header__profile} link`}>
+                      <UserAvatar user={auth} size={AvatarSize.xsmall} />
+                      <label style={auth.color ? { color: auth.color } : {}}>
+                        {auth.username}
+                      </label>
+                    </div>
+                  }
                 >
-                  <FontAwesomeIcon icon={faRightFromBracket} /> SIGNOUT
-                </div>
+                  <Link
+                    className={`${styles.header__link} link`}
+                    href={`/users/${auth.id}`}
+                  >
+                    <FontAwesomeIcon icon={faUser} /> Profile
+                  </Link>
+                  <div
+                    className={`${styles.header__link} link`}
+                    onClick={() => signout(dispatch)}
+                  >
+                    <FontAwesomeIcon icon={faRightFromBracket} /> Signout
+                  </div>
+                </HeaderMenu>
               </>
             ) : (
               <>

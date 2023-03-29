@@ -111,7 +111,7 @@ const User = ({ auth }) => {
     onCompleted: (data) => {
       dispatch({
         type: UserReducerActions.update,
-        payload: data,
+        payload: data.updateProfile,
       });
       setUpdating(false);
     },
@@ -119,7 +119,9 @@ const User = ({ auth }) => {
   });
   const onModify = async (formData: ProfileData) => {
     const { picture, ...userData } = formData;
-    await updateProfilePicture(picture);
+    if (picture) {
+      await updateProfilePicture(picture);
+    }
     updateProfile({ variables: { userId: id, userData } });
   };
 
