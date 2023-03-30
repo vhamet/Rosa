@@ -64,7 +64,7 @@ const Users = () => {
         <meta name="viewport" content="initial-scale=1.0, width=device-width" />
       </Head>
 
-      <Card classnames={styles.users__list}>
+      <Card className={styles.users__list}>
         <h1>Members</h1>
         <table>
           <tbody>

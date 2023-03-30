@@ -10,4 +10,26 @@
     color: $green-darkest;
     transform: translateY(-1px);
   }
+
+  &.background {
+    border-radius: 50px;
+    padding: 0.8rem;
+    background-color: white;
+  }
+
+  &.secondary {
+    color: $orange;
+
+    &:hover {
+      color: $orange-darker;
+    }
+  }
+
+  &.danger {
+    color: $danger;
+
+    &:hover {
+      color: $danger-darker;
+    }
+  }
 }

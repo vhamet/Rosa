@@ -27,21 +27,21 @@ const ColorInput = ({
   options,
 }: ColorInputProps) => {
   const [currentColor, setCurrentColor] = useState(defaultValue || "");
-  const [opened, setOpened] = useState(false);
+  const [open, setOpen] = useState(false);
   const handleChange = (color) => {
     setCurrentColor(color?.hex);
     setValue(name, color?.hex || "");
   };
 
   const inputRef = useRef();
-  const hidePicker = () => setOpened(false);
+  const hidePicker = () => setOpen(false);
   useClickOutside(inputRef, hidePicker);
 
   return (
     <div className={styles["color-input"]} ref={inputRef}>
       <div
         className={styles["color-input__color"]}
-        onClick={() => setOpened((opened) => !opened)}
+        onClick={() => setOpen((open) => !open)}
       >
         <div
           className={styles["color-input__color-content"]}
@@ -53,7 +53,7 @@ const ColorInput = ({
           {...register(name, options)}
         />
       </div>
-      {opened && (
+      {open && (
         <div className={styles["color-input__picker"]}>
           <ChromePicker
             color={currentColor}

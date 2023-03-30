@@ -161,4 +161,12 @@ export class EventService {
 
     return true;
   }
+
+  async deleteEvent(id: number): Promise<boolean> {
+    await this.prisma.event.delete({
+      where: { id },
+    });
+
+    return true;
+  }
 }

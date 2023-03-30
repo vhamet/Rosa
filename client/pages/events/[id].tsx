@@ -1,9 +1,14 @@
+import { useState } from "react";
 import { useRouter } from "next/router";
 import Head from "next/head";
 import jwtDecode from "jwt-decode";
-import { gql, useQuery } from "@apollo/client";
+import { gql, useMutation, useQuery } from "@apollo/client";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faArrowLeft } from "@fortawesome/free-solid-svg-icons";
+import {
+  faArrowLeft,
+  faTrash,
+  faPenToSquare,
+} from "@fortawesome/free-solid-svg-icons";
 
 import {
   initializeApollo,
@@ -17,8 +22,14 @@ import { ACCESS_TOKEN } from "../../utils/const";
 import Participants from "./Participants";
 import Comments from "./Comments";
 import { EVENT_CONTENT_FRAGMENT } from ".";
+import IconButton, {
+  IconButtonKind,
+  IconButtonSize,
+} from "../../components/IconButton";
+import Modal from "../../components/Modal";
 
 import styles from "./[id].module.scss";
+import Button, { ButtonKind } from "../../components/Button";
 
 const EVENT_QUERY = gql`
   ${EVENT_CONTENT_FRAGMENT}
@@ -26,6 +37,12 @@ const EVENT_QUERY = gql`
     event(id: $id) {
       ...EventContentFragment
     }
+  }
+`;
+
+const DELETE_EVENT_MUTATION = gql`
+  mutation DeleteEvent($eventId: Float!) {
+    deleteEvent(eventId: $eventId)
   }
 `;
 
@@ -60,6 +77,17 @@ const EventDetail = ({ auth }) => {
     variables: { id },
   });
 
+  const [deleting, setDeleting] = useState(false);
+  const [deleteEvent] = useMutation(DELETE_EVENT_MUTATION, {
+    variables: { eventId: id },
+    onCompleted: () => router.push("/events"),
+    update: (cache) => {
+      const normalizedId = cache.identify({ id, __typename: "Event" });
+      cache.evict({ id: normalizedId });
+      cache.gc();
+    },
+  });
+
   if (loading) {
     return <p>Loading...</p>;
   }
@@ -74,8 +102,9 @@ const EventDetail = ({ auth }) => {
       start,
       end,
       comments,
+      pictureUrl,
       createdAt,
-      createdBy: { username },
+      createdBy: { id: createdBy, username },
     },
   } = data;
 
@@ -93,7 +122,19 @@ const EventDetail = ({ auth }) => {
         <FontAwesomeIcon icon={faArrowLeft} /> Events
       </div>
 
-      <Card classnames={styles["view-event__card"]}>
+      <Card className={styles["view-event__card"]}>
+        <img
+          src={
+            pictureUrl
+              ? `${process.env.NEXT_PUBLIC_URL_SERVER}${pictureUrl}`
+              : "/sou.jpeg"
+          }
+          alt={title}
+          onError={({ currentTarget }) => {
+            currentTarget.onerror = null;
+            currentTarget.src = "sou.jpeg";
+          }}
+        />
         <div className={styles["view-event__header"]}>
           <EventDate start={start} end={end} />
           <div className={styles["view-event__information"]}>
@@ -110,7 +151,46 @@ const EventDetail = ({ auth }) => {
         />
 
         <Comments event={data?.event} comments={comments} loggedUser={auth} />
+
+        {auth.id === createdBy && (
+          <div className={styles["view-event__actions"]}>
+            <IconButton
+              icon={faPenToSquare}
+              size={IconButtonSize.medium}
+              onClick={() => {}}
+              withBackground
+            />
+            <IconButton
+              icon={faTrash}
+              size={IconButtonSize.medium}
+              kind={IconButtonKind.danger}
+              onClick={() => setDeleting(true)}
+              withBackground
+            />
+          </div>
+        )}
       </Card>
+      <Modal visible={deleting} onClose={() => setDeleting(false)}>
+        <div className={styles["view-event__modal"]}>
+          <div>Delete event</div>
+          <div>
+            Are you sure you want to delete this event ? This action is
+            irreversible !
+          </div>
+          <div className={styles["view-event__modal__actions"]}>
+            <Button
+              kind={ButtonKind.secondary}
+              onClick={() => setDeleting(false)}
+              label="Cancel"
+            />
+            <Button
+              kind={ButtonKind.danger}
+              onClick={deleteEvent}
+              label="Confirm"
+            />
+          </div>
+        </div>
+      </Modal>
     </div>
   );
 };

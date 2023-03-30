@@ -21,4 +21,15 @@
       color: white;
     }
   }
+
+  &.danger button {
+    background-color: $danger;
+    box-shadow: 0px 4px 6px $danger;
+
+    &:hover {
+      background-color: $danger-darker;
+      box-shadow: 0px 8px 10px $danger-darker;
+      color: white;
+    }
+  }
 }

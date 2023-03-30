@@ -16,6 +16,25 @@
   &__card {
     max-width: 95vw;
     width: 60%;
+    position: relative;
+
+    &:hover {
+      .view-event__actions {
+        display: flex;
+      }
+    }
+
+    > img {
+      height: calc(100% + 4rem);
+      max-height: 22rem;
+      width: calc(100% + 4rem);
+      position: relative;
+      top: -2rem;
+      left: -2rem;
+      border-top-left-radius: 8px;
+      border-top-right-radius: 8px;
+      object-fit: cover;
+    }
   }
 
   &__header {
@@ -185,6 +204,46 @@
           color: $green-darker;
           transform: translateY(-40%);
         }
+      }
+    }
+  }
+
+  &__actions {
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+    display: none;
+    align-items: center;
+    justify-content: space-between;
+
+    svg {
+      font-size: 1.5rem;
+    }
+
+    > :first-child {
+      margin-right: 0.5rem;
+    }
+  }
+
+  &__modal {
+    div:first-child {
+      font-size: 1.5rem;
+      font-weight: 600;
+      color: $danger;
+    }
+
+    div:nth-child(2) {
+      margin-top: 0.6rem;
+      margin-bottom: 1rem;
+    }
+
+    &__actions {
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+
+      > :first-child {
+        margin-right: 1rem;
       }
     }
   }

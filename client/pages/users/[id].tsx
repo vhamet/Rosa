@@ -126,7 +126,7 @@ const UserProfile = ({ auth }) => {
         <FontAwesomeIcon icon={faArrowLeft} /> Members
       </div>
 
-      <Card classnames={styles["profile__card"]}>
+      <Card className={styles["profile__card"]}>
         {updating ? (
           <UpdateProfile
             user={data?.user}

@@ -3,6 +3,7 @@ import styles from "./Button.module.scss";
 export enum ButtonKind {
   primary = "primary",
   secondary = "secondary",
+  danger = "danger",
 }
 
 type ButtonProps = {

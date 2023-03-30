@@ -26,7 +26,7 @@ const Signup = () => {
   };
 
   return (
-    <Card classnames={styles.signup}>
+    <Card className={styles.signup}>
       <Head>
         <title>Signin | Rosa</title>
         <meta name="viewport" content="initial-scale=1.0, width=device-width" />

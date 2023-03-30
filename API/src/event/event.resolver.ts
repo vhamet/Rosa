@@ -1,5 +1,9 @@
 import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
-import { NotFoundException, UseGuards } from '@nestjs/common';
+import {
+  NotFoundException,
+  UnauthorizedException,
+  UseGuards,
+} from '@nestjs/common';
 
 import { Event } from './event.model';
 import { EventService } from './event.service';
@@ -95,5 +99,28 @@ export class EventResolver {
     const canceled = await this.eventService.cancelParticipation(event, user);
 
     return canceled ? user : null;
+  }
+
+  @Mutation(() => Boolean)
+  @UseGuards(JwtGuard)
+  async deleteEvent(
+    @Args('eventId') eventId: number,
+    @CurrentGqlUser() user: User,
+  ): Promise<boolean> {
+    const event = await this.eventService.getEvent(eventId);
+    if (!event) {
+      throw new NotFoundException({
+        error: 'This event does not exists',
+      });
+    }
+
+    if (event.createdBy.id !== user.id) {
+      throw new UnauthorizedException({
+        error: 'You are not allowed to delete this event',
+      });
+    }
+    await this.eventService.deleteEvent(eventId);
+
+    return true;
   }
 }

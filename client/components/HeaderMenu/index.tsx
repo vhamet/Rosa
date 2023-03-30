@@ -10,22 +10,20 @@ type HeaderMenu = {
 };
 
 const HeaderMenu = ({ header, children }) => {
-  const [opened, setOpened] = useState(false);
+  const [open, setOpen] = useState(false);
 
   const containerRef = useRef();
-  useClickOutside(containerRef, () => setOpened(false));
+  useClickOutside(containerRef, () => setOpen(false));
 
   return (
     <div className={styles["header-menu"]} ref={containerRef}>
       <div
         className={styles["header-menu__header"]}
-        onClick={() => setOpened((o) => !o)}
+        onClick={() => setOpen((o) => !o)}
       >
         {header}
       </div>
-      {opened && (
-        <div className={styles["header-menu__content"]}>{children}</div>
-      )}
+      {open && <div className={styles["header-menu__content"]}>{children}</div>}
     </div>
   );
 };

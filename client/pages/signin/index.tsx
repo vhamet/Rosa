@@ -27,7 +27,7 @@ const Signin = () => {
   };
 
   return (
-    <Card classnames={styles.signin}>
+    <Card className={styles.signin}>
       <Head>
         <title>Signin | Rosa</title>
         <meta name="viewport" content="initial-scale=1.0, width=device-width" />
