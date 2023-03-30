@@ -18,6 +18,7 @@ const EventItem = ({
     createdBy: { username },
     participants,
     comments,
+    pictureUrl,
   },
 }: EventItemProps) => {
   const router = useRouter();
@@ -25,6 +26,18 @@ const EventItem = ({
   return (
     <Card onClick={() => router.push(`/events/${id}`, null, { shallow: true })}>
       <div className={styles["event-item"]}>
+        <img
+          src={
+            pictureUrl
+              ? `${process.env.NEXT_PUBLIC_URL_SERVER}${pictureUrl}`
+              : "sou.jpeg"
+          }
+          alt={title}
+          onError={({ currentTarget }) => {
+            currentTarget.onerror = null;
+            currentTarget.src = "sou.jpeg";
+          }}
+        />
         <EventDate start={start} end={end} />
         <div className={styles["event-item__title"]}>{title}</div>
         <div className={styles["event-item__description"]}>{description}</div>

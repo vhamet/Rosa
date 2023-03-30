@@ -27,6 +27,7 @@ export const EVENT_CONTENT_FRAGMENT = gql`
     description
     start
     end
+    pictureUrl
     createdAt
     createdBy {
       id

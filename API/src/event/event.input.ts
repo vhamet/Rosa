@@ -16,6 +16,9 @@ export class EventCreateInput {
   @Field(() => String)
   end: string;
 
+  @Field(() => String)
+  pictureUrl: string;
+
   @Field(() => Number)
   userId: number;
 }

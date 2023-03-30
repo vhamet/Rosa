@@ -13,12 +13,14 @@ import {
 import HeaderMenu from "../HeaderMenu";
 import useUserContext from "../../services/authentication/user-context";
 import { signout } from "../../services/authentication/utils";
+import UserAvatar, { AvatarSize } from "../UserAvatar";
+import useCurrentUser from "../hooks/useCurrentUser";
 
 import styles from "./Header.module.scss";
-import UserAvatar, { AvatarSize } from "../UserAvatar";
 
 const Header = () => {
-  const { auth, dispatch } = useUserContext();
+  const { dispatch } = useUserContext();
+  const user = useCurrentUser();
   const [initialized, setInitialized] = useState(false);
 
   useEffect(() => {
@@ -35,27 +37,27 @@ const Header = () => {
       <div>
         {initialized && (
           <div className={styles.header__links}>
-            {auth ? (
+            {user ? (
               <>
                 <Link className={`${styles.header__link} link`} href="/users">
-                  <FontAwesomeIcon icon={faUsers} /> MEMBERS
+                  <FontAwesomeIcon icon={faUsers} /> Members
                 </Link>
                 <Link className={`${styles.header__link} link`} href="/events">
-                  <FontAwesomeIcon icon={faCalendarWeek} /> EVENTS
+                  <FontAwesomeIcon icon={faCalendarWeek} /> Events
                 </Link>
                 <HeaderMenu
                   header={
                     <div className={`${styles.header__profile} link`}>
-                      <UserAvatar user={auth} size={AvatarSize.xsmall} />
-                      <label style={auth.color ? { color: auth.color } : {}}>
-                        {auth.username}
+                      <UserAvatar user={user} size={AvatarSize.xsmall} />
+                      <label style={user.color ? { color: user.color } : {}}>
+                        {user.username}
                       </label>
                     </div>
                   }
                 >
                   <Link
                     className={`${styles.header__link} link`}
-                    href={`/users/${auth.id}`}
+                    href={`/users/${user.id}`}
                   >
                     <FontAwesomeIcon icon={faUser} /> Profile
                   </Link>

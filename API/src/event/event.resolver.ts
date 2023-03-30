@@ -48,6 +48,7 @@ export class EventResolver {
     @Args('description', { nullable: true }) description: string,
     @Args('start', { nullable: true }) start: string,
     @Args('end', { nullable: true }) end: string,
+    @Args('pictureUrl', { nullable: true }) pictureUrl: string,
     @CurrentGqlUser() user: User,
   ): Promise<Event> {
     const event = await this.eventService.createEvent({
@@ -56,6 +57,7 @@ export class EventResolver {
       start,
       end,
       userId: user.id,
+      pictureUrl,
     });
 
     return { ...event, createdBy: user };

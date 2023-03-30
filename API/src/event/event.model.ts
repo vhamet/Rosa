@@ -29,6 +29,11 @@ export class Event implements EventClient {
   })
   end: Date;
 
+  @Field(() => String, {
+    nullable: true,
+  })
+  pictureUrl: string;
+
   @Field(() => User)
   createdBy?: User;
 

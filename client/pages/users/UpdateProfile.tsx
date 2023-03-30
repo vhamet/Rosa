@@ -1,9 +1,11 @@
-import { ChangeEvent, useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 
 import Button, { ButtonKind } from "../../components/Button";
 import FormInput from "../../components/FormInput";
-import UserAvatar, { AvatarSize } from "../../components/UserAvatar";
+import ImageInput, {
+  ImageInputSize,
+  ImageInputStyle,
+} from "../../components/ImageInput";
 import { User } from "../../utils/types";
 import { ProfileData } from "./[id]";
 
@@ -23,42 +25,21 @@ const UpdateProfile = ({ user, onConfirm, onCancel }: UpdateProfileProps) => {
     formState: { errors },
   } = useForm();
 
-  const [picture, setPicture] = useState<File>();
-  const [preview, setPreview] = useState<string>();
-  const handlePictureSelection = (event: ChangeEvent<HTMLInputElement>) => {
-    if (!event.target.files || event.target.files.length === 0) {
-      setPicture(undefined);
-      setValue("picture", "");
-      return;
-    }
-
-    setPicture(event.target.files[0]);
-    setValue("picture", event.target.files[0]);
-  };
-
-  useEffect(() => {
-    if (!picture) {
-      setPreview(undefined);
-      return;
-    }
-    const objectUrl = URL.createObjectURL(picture);
-    setPreview(objectUrl);
-
-    return () => URL.revokeObjectURL(objectUrl);
-  }, [picture]);
-
   return (
     <form
       className={styles["update-profile"]}
       onSubmit={handleSubmit(onConfirm)}
     >
       <div className={styles["update-profile__image"]}>
-        <UserAvatar preview={preview} user={user} size={AvatarSize.xlarge} />
-        <input
-          type="file"
-          className={styles["update-profile__file"]}
-          onChange={handlePictureSelection}
-          accept="image/png, image/gif, image/jpeg"
+        <ImageInput
+          name="picture"
+          pictureUrl={
+            user.pictureUrl &&
+            `${process.env.NEXT_PUBLIC_URL_SERVER}${user.pictureUrl}`
+          }
+          setValue={setValue}
+          size={ImageInputSize.xlarge}
+          style={ImageInputStyle.round}
         />
       </div>
       <FormInput

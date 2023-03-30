@@ -7,7 +7,7 @@ import {
 } from "react-hook-form";
 import { ChromePicker } from "react-color";
 
-import useClickOutside from "../useClickOutside";
+import useClickOutside from "../hooks/useClickOutside";
 
 import styles from "./ColorInput.module.scss";
 

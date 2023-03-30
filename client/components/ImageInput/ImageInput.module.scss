@@ -1,0 +1,61 @@
+@import "../../styles/variables.scss";
+
+.image-input {
+  display: flex;
+  align-items: center;
+
+  &__preview {
+    margin-right: 1rem;
+    
+    border: 1px solid $green-darker;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+
+    &:hover {
+      border: 1px solid $green-darkest;
+
+      svg {
+        color: $green-darkest;
+      }
+    }
+
+    svg {
+      color: $green-darker;
+    }
+
+    img {
+      object-fit: cover;
+    }
+  }
+
+  &__input {
+    font-family: inherit;
+
+    &::-webkit-file-upload-button {
+      display: none;
+    }
+
+    &::before {
+      content: 'Select a picture';
+      margin-right: 0.5rem;
+      display: inline-block;
+      padding: 0.5rem;
+      font-weight: 400;
+      color: white;
+      background-color: $green-darker;
+      border-radius: 8px;
+      border: none;
+      cursor: pointer;
+    }
+    &:hover::before {
+      background-color: $green-darkest;
+      color: white;
+    }
+    &:active::before {
+      background-color: $green-darkest;
+      color: white;
+    }
+  }
+}

@@ -10,14 +10,16 @@ import { AppService } from './app.service';
 import { UserModule } from './user/user.module';
 import { EventModule } from './event/event.module';
 import { CommentModule } from './comment/comment.module';
-import { UserController } from './user/user.controller';
+import { UploadController } from './upload/upload.controller';
 import { JwtService } from '@nestjs/jwt';
+import { UploadModule } from './upload/upload.module';
 
 @Module({
   imports: [
     UserModule,
     EventModule,
     CommentModule,
+    UploadModule,
     ConfigModule.forRoot({ isGlobal: true }),
     GraphQLModule.forRoot<ApolloDriverConfig>({
       include: [UserModule, EventModule, CommentModule],
@@ -29,7 +31,7 @@ import { JwtService } from '@nestjs/jwt';
       serveRoot: '/public',
     }),
   ],
-  controllers: [AppController, UserController],
+  controllers: [AppController, UploadController],
   providers: [AppService, JwtService],
 })
 export class AppModule {}

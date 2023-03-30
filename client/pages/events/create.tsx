@@ -4,10 +4,13 @@ import { useRouter } from "next/router";
 import { useForm } from "react-hook-form";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faArrowLeft } from "@fortawesome/free-solid-svg-icons";
+
 import Button from "../../components/Button";
 import Card from "../../components/Card";
 import FormInput from "../../components/FormInput";
 import withPrivateRouteHOC from "../../components/withPrivateRouteHOC";
+import ImageInput, { ImageInputSize } from "../../components/ImageInput";
+import { updatePicture } from "../../utils/utils";
 
 import styles from "./create.module.scss";
 
@@ -17,18 +20,21 @@ const CREATE_EVENT = gql`
     $description: String
     $start: String
     $end: String
+    $pictureUrl: String
   ) {
     createEvent(
       title: $title
       description: $description
       start: $start
       end: $end
+      pictureUrl: $pictureUrl
     ) {
       id
       title
       description
       start
       end
+      pictureUrl
       createdAt
       createdBy {
         id
@@ -46,6 +52,7 @@ const NewEvent = () => {
     handleSubmit,
     formState: { errors },
     watch,
+    setValue,
   } = useForm();
   const watchStart = watch("start");
 
@@ -54,7 +61,14 @@ const NewEvent = () => {
     onCompleted: (data) =>
       router.push(`/events/${data.createEvent.id}`, null, { shallow: true }),
   });
-  const onSubmit = (formData) => createEvent({ variables: formData });
+  const onSubmit = async (data) => {
+    const { picture, ...formData } = data;
+    let pictureUrl;
+    if (picture) {
+      pictureUrl = await updatePicture(picture, "uploadEventPicture");
+    }
+    createEvent({ variables: { ...formData, pictureUrl } });
+  };
 
   return (
     <div className={styles["create-event"]}>
@@ -76,6 +90,11 @@ const NewEvent = () => {
           className={styles["create-event__form"]}
           onSubmit={handleSubmit(onSubmit)}
         >
+          <ImageInput
+            name="picture"
+            setValue={setValue}
+            size={ImageInputSize.xlarge}
+          />
           <FormInput
             name="title"
             label="Title"

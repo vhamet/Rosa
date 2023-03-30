@@ -41,5 +41,6 @@ export type Event = {
   createdBy: User;
   participants: User[];
   comments: Comment[];
+  pictureUrl: string;
 };
 export type EventItemProps = { event: Event };

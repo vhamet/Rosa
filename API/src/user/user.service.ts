@@ -83,38 +83,4 @@ export class UserService {
 
     return this.userWithoutPassword(updatedUser);
   }
-
-  async saveProfilePicture(
-    user: User,
-    file: Express.Multer.File,
-  ): Promise<User> {
-    const uuid = generateUuid();
-    const extension = mime.extension(file.mimetype);
-    const filename = `${uuid}.${extension}`;
-    const pathname = path.join(__dirname, '..', '../public', filename);
-
-    const ws = createWriteStream(pathname);
-    ws.write(file.buffer);
-
-    const { pictureUrl } = await this.prisma.user.findUnique({
-      select: { pictureUrl: true },
-      where: { id: user.id },
-    });
-    if (pictureUrl) {
-      unlink(
-        path.join(__dirname, '..', '..', pictureUrl),
-        (err) =>
-          err && console.error(`Error removing picture ${pictureUrl}:\n${err}`),
-      );
-    }
-
-    const updatedUser = await this.prisma.user.update({
-      where: {
-        id: user.id,
-      },
-      data: { pictureUrl: `/public/${filename}` },
-    });
-
-    return this.userWithoutPassword(updatedUser);
-  }
 }

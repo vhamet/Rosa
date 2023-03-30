@@ -1,6 +1,6 @@
 import { ReactNode, useRef, useState } from "react";
 
-import useClickOutside from "../useClickOutside";
+import useClickOutside from "../hooks/useClickOutside";
 
 import styles from "./HeaderMenu.module.scss";
 

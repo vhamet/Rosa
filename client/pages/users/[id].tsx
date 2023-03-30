@@ -5,7 +5,6 @@ import jwtDecode from "jwt-decode";
 import { gql, useMutation, useQuery } from "@apollo/client";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faArrowLeft } from "@fortawesome/free-solid-svg-icons";
-import Cookies from "js-cookie";
 
 import {
   initializeApollo,
@@ -20,7 +19,7 @@ import { ACCESS_TOKEN } from "../../utils/const";
 import useUserContext, {
   UserReducerActions,
 } from "../../services/authentication/user-context";
-import { User } from "../../utils/types";
+import { updatePicture } from "../../utils/utils";
 
 import styles from "./[id].module.scss";
 
@@ -31,7 +30,7 @@ export type ProfileData = {
   picture?: File;
 };
 
-const USER_QUERY = gql`
+export const USER_QUERY = gql`
   query User($id: Float!) {
     user(id: $id) {
       id
@@ -55,24 +54,6 @@ const UPDATE_PROFILE_MUTATION = gql`
     }
   }
 `;
-
-const updateProfilePicture = async (picture: File): Promise<User> => {
-  const body = new FormData();
-  body.append("file", picture);
-  const token = Cookies.get(ACCESS_TOKEN);
-  const result = await fetch(
-    `${process.env.NEXT_PUBLIC_URL_SERVER}/user/uploadProfilePicture`,
-    {
-      method: "POST",
-      headers: {
-        authorization: token ? `Bearer ${token}` : "",
-      },
-      body,
-    }
-  );
-
-  return await result.json();
-};
 
 export const getServerSideProps = async (context) => {
   let user, auth;
@@ -98,7 +79,7 @@ export const getServerSideProps = async (context) => {
   }
 };
 
-const User = ({ auth }) => {
+const UserProfile = ({ auth }) => {
   const router = useRouter();
   const id = +router.query.id;
   const { dispatch } = useUserContext();
@@ -108,10 +89,9 @@ const User = ({ auth }) => {
   });
 
   const [updateProfile] = useMutation(UPDATE_PROFILE_MUTATION, {
-    onCompleted: (data) => {
+    onCompleted: () => {
       dispatch({
         type: UserReducerActions.update,
-        payload: data.updateProfile,
       });
       setUpdating(false);
     },
@@ -120,7 +100,7 @@ const User = ({ auth }) => {
   const onModify = async (formData: ProfileData) => {
     const { picture, ...userData } = formData;
     if (picture) {
-      await updateProfilePicture(picture);
+      await updatePicture(picture, "uploadProfilePicture");
     }
     updateProfile({ variables: { userId: id, userData } });
   };
@@ -168,4 +148,4 @@ const User = ({ auth }) => {
   );
 };
 
-export default withPrivateRouteHOC(User);
+export default withPrivateRouteHOC(UserProfile);

@@ -2,6 +2,11 @@
 
 .header-menu {
   position: relative;
+  cursor: pointer;
+
+  &__header * {
+    cursor: pointer;
+  }
 
   &__content {
     padding: 1rem 1.5rem;

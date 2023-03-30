@@ -16,10 +16,10 @@ export type AuthenticationType = {
   pictureUrl?: string;
 };
 
-type AuthenticationActionType =
+export type AuthenticationActionType =
   | { type: UserReducerActions.signin; payload: AuthenticationType }
   | { type: UserReducerActions.signout }
-  | { type: UserReducerActions.update; payload: AuthenticationType };
+  | { type: UserReducerActions.update };
 
 export type UserContextType = {
   auth: AuthenticationType;
@@ -33,7 +33,7 @@ const reducer = (state: UserContextType, action: AuthenticationActionType) => {
     case UserReducerActions.signout:
       return { ...state, auth: null };
     case UserReducerActions.update:
-      return { ...state, auth: { ...state.auth, ...action.payload } };
+      return { ...state, auth: { ...state.auth } };
     default:
       throw new Error();
   }

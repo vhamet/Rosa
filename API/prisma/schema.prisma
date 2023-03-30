@@ -31,6 +31,7 @@ model Event {
   description       String? 
   start DateTime?
   end DateTime?
+  pictureUrl  String?
 
   createdBy   User @relation(fields: [userId], references: [id], name: "eventsCreated")
   userId Int

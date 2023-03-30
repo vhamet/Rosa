@@ -39,6 +39,7 @@ export class EventService {
     start,
     end,
     userId,
+    pictureUrl,
   }: EventCreateInput): Promise<Event> {
     const event = await this.prisma.event.create({
       data: {
@@ -47,6 +48,7 @@ export class EventService {
         start: moment(start, 'YYYY-MM-DD').toDate(),
         end: moment(end, 'YYYY-MM-DD').toDate(),
         userId,
+        pictureUrl,
       },
       include: {
         participants: {
