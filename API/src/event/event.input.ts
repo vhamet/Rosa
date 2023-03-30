@@ -22,3 +22,23 @@ export class EventCreateInput {
   @Field(() => Number)
   userId: number;
 }
+
+@InputType()
+export class EventUpdateInput {
+  @Field(() => String, {
+    nullable: false,
+  })
+  title: string;
+
+  @Field(() => String)
+  description: string;
+
+  @Field(() => String)
+  start: string;
+
+  @Field(() => String)
+  end: string;
+
+  @Field(() => Number)
+  userId: number;
+}

@@ -52,7 +52,11 @@ const FormInput = ({
   switch (type) {
     case "textarea":
       input = (
-        <textarea {...register(name, options)} placeholder={placeholder} />
+        <textarea
+          defaultValue={defaultValue}
+          {...register(name, options)}
+          placeholder={placeholder}
+        />
       );
       break;
     case "date":

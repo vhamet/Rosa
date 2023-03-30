@@ -18,11 +18,4 @@
     text-align: center;
     color: $orange;
   }
-
-  &__form {
-    > :not(:last-child) {
-      min-width: 40vw;
-      margin-bottom: 2rem;
-    } 
-  }
 }

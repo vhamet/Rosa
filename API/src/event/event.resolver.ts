@@ -123,4 +123,35 @@ export class EventResolver {
 
     return true;
   }
+
+  @Mutation(() => Event)
+  @UseGuards(JwtGuard)
+  async updateEvent(
+    @Args('eventId') eventId: number,
+    @Args('title') title: string,
+    @Args('description', { nullable: true }) description: string,
+    @Args('start', { nullable: true }) start: string,
+    @Args('end', { nullable: true }) end: string,
+    @CurrentGqlUser() user: User,
+  ): Promise<Event> {
+    const event = await this.eventService.getEvent(eventId);
+    if (!event) {
+      throw new NotFoundException(`Event with id ${eventId} does not exists`);
+    }
+    if (event.createdBy.id !== user.id) {
+      throw new UnauthorizedException(
+        'You don not have permission to update this event',
+      );
+    }
+
+    const updatedEvent = await this.eventService.updateEvent(eventId, {
+      title,
+      description,
+      start,
+      end,
+      userId: user.id,
+    });
+
+    return { ...updatedEvent };
+  }
 }

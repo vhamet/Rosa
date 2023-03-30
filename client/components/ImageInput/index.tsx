@@ -35,7 +35,7 @@ const ImageInput = ({
 }: ImageInputProps) => {
   const inputRef = useRef<HTMLInputElement>();
   const [picture, setPicture] = useState<File>();
-  const [preview, setPreview] = useState<string>();
+  const [preview, setPreview] = useState<string>(pictureUrl);
   const handlePictureSelection = (event: ChangeEvent<HTMLInputElement>) => {
     if (!event.target.files || event.target.files.length === 0) {
       setPicture(undefined);
@@ -77,7 +77,15 @@ const ImageInput = ({
         onClick={() => inputRef.current?.click()}
       >
         {preview || pictureUrl ? (
-          <img src={preview || pictureUrl} alt="preview" style={sizes} />
+          <img
+            src={
+              preview ||
+              (pictureUrl &&
+                `${process.env.NEXT_PUBLIC_URL_SERVER}${pictureUrl}`)
+            }
+            alt="preview"
+            style={sizes}
+          />
         ) : (
           <FontAwesomeIcon icon={faCamera} />
         )}

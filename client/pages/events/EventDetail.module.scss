@@ -1,0 +1,91 @@
+@import "../../styles/variables.scss";
+
+.event-detail {
+  &__card {
+    max-width: 95vw;
+    width: 60%;
+    position: relative;
+
+    &:hover {
+      .event-detail__actions {
+        display: flex;
+      }
+    }
+
+    > img {
+      height: calc(100% + 4rem);
+      max-height: 22rem;
+      width: calc(100% + 4rem);
+      position: relative;
+      top: -2rem;
+      left: -2rem;
+      border-top-left-radius: 8px;
+      border-top-right-radius: 8px;
+      object-fit: cover;
+    }
+  }
+
+  &__header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  &__information {
+    font-size: 0.825rem;
+    color: $green-darker;
+  }
+
+  &__title {
+    margin-bottom: 1.25rem;
+    font-size: 1.75rem;
+    font-weight: 700;
+    color: $green;
+  }
+
+  &__description {
+    margin-bottom: 1.5rem;
+    color: $black-lighter;
+    white-space: pre-line;
+  }
+
+  &__actions {
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+    display: none;
+    align-items: center;
+    justify-content: space-between;
+
+    svg {
+      font-size: 1.5rem;
+    }
+
+    > :first-child {
+      margin-right: 0.5rem;
+    }
+  }
+
+  &__modal {
+    > div:first-child {
+      font-size: 1.5rem;
+      font-weight: 600;
+      color: $danger;
+    }
+
+    > div:nth-child(2) {
+      margin-top: 0.6rem;
+      margin-bottom: 1.3rem;
+    }
+
+    &__actions {
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+
+      > :first-child {
+        margin-right: 1rem;
+      }
+    }
+  }
+}

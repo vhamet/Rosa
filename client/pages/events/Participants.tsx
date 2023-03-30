@@ -4,9 +4,9 @@ import { faUserPlus } from "@fortawesome/free-solid-svg-icons";
 
 import UserTag from "../../components/UserTag";
 import Tag from "../../components/Tag";
-
-import styles from "./[id].module.scss";
 import { Event } from "../../utils/types";
+
+import styles from "./Participants.module.scss";
 
 const PARTICIPATE_MUTATION = gql`
   mutation Participate($eventId: Float!) {
@@ -73,14 +73,14 @@ const Participants = ({ event, loggedId, eventOver }: ParticipantsProps) => {
   const hasParticipants = participants.length > 0;
 
   return (
-    <div className={styles["view-event__participants"]}>
-      <div className={styles["view-event__participants__title"]}>
+    <div className={styles["participants"]}>
+      <div className={styles["participants__title"]}>
         Participants
-        <label className={styles["view-event__participants__count"]}>
+        <label className={styles["participants__count"]}>
           {hasParticipants && `(${participants.length})`}
         </label>
       </div>
-      <div className={styles["view-event__participants__container"]}>
+      <div className={styles["participants__container"]}>
         {hasParticipants ? (
           participants.map((user) => (
             <UserTag
@@ -92,15 +92,12 @@ const Participants = ({ event, loggedId, eventOver }: ParticipantsProps) => {
             />
           ))
         ) : (
-          <div className={styles["view-event__participants__empty"]}>
+          <div className={styles["participants__empty"]}>
             No participant yet...
           </div>
         )}
         {!eventOver && participants.every(({ id }) => loggedId !== id) && (
-          <Tag
-            onClick={participate}
-            className={styles["view-event__participate"]}
-          >
+          <Tag onClick={participate} className={styles["participate"]}>
             <FontAwesomeIcon icon={faUserPlus} />
             Participate
           </Tag>

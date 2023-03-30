@@ -3,7 +3,7 @@ import * as moment from 'moment';
 import { PrismaService } from 'src/prisma.service';
 
 import { User } from '../user/user.model';
-import { EventCreateInput } from './event.input';
+import { EventCreateInput, EventUpdateInput } from './event.input';
 import { Event } from './event.model';
 
 const SAFE_USER_FIELDS = {
@@ -26,7 +26,7 @@ const eventIncludes = {
 
 const toGqlEvent = (event) => ({
   ...event,
-  participants: event.participants.map(({ user }) => user),
+  participants: event.participants?.map(({ user }) => user),
 });
 
 @Injectable()
@@ -45,8 +45,8 @@ export class EventService {
       data: {
         title,
         description,
-        start: moment(start, 'YYYY-MM-DD').toDate(),
-        end: moment(end, 'YYYY-MM-DD').toDate(),
+        start: moment(start, 'YYYY-MM-DDTHH:mm').add(2, 'hours').toDate(),
+        end: end && moment(end, 'YYYY-MM-DDTHH:mm').add(2, 'hours').toDate(),
         userId,
         pictureUrl,
       },
@@ -168,5 +168,23 @@ export class EventService {
     });
 
     return true;
+  }
+
+  async updateEvent(
+    eventId: number,
+    { title, description, start, end, userId }: EventUpdateInput,
+  ): Promise<Event> {
+    const event = await this.prisma.event.update({
+      where: { id: eventId },
+      data: {
+        title,
+        description,
+        start: moment(start, 'YYYY-MM-DDTHH:mm').add(2, 'hours').toDate(),
+        end: end && moment(end, 'YYYY-MM-DDTHH:mm').add(2, 'hours').toDate(),
+        userId,
+      },
+    });
+
+    return toGqlEvent(event);
   }
 }

@@ -5,11 +5,11 @@ import { faPaperPlane } from "@fortawesome/free-solid-svg-icons";
 import TextareaAutosize from "react-textarea-autosize";
 
 import { Comment, Event, User } from "../../utils/types";
-
-import styles from "./[id].module.scss";
 import { fromNow } from "../../utils/dates";
 import Link from "next/link";
 import UserAvatar from "../../components/UserAvatar";
+
+import styles from "./Comments.module.scss";
 
 const CREATE_COMMENT_MUTATION = gql`
   mutation CreateComment($eventId: Float!, $content: String!) {
@@ -65,22 +65,22 @@ const Comments = ({ event, comments, loggedUser }: CommentsProps) => {
   };
 
   return (
-    <div className={styles["view-event__comments"]}>
-      <div className={styles["view-event__comments__container"]}>
+    <div className={styles["comments"]}>
+      <div className={styles["comments__container"]}>
         {comments.map(({ id, content, createdAt, author }) => (
           <div
-            className={`${styles["view-event__comments__comment"]} ${
+            key={id}
+            className={`${styles["comments__comment"]} ${
               author.id === loggedUser.id ? styles.own : ""
             }`}
           >
             <UserAvatar user={loggedUser} />
             <div
-              key={id}
-              className={`${styles["view-event__comments__content"]} ${
+              className={`${styles["comments__content"]} ${
                 author.id === loggedUser.id ? styles.own : ""
               }`}
             >
-              <div className={styles["view-event__comments__info"]}>
+              <div className={styles["comments__info"]}>
                 <Link href={`/user/${author.id}`}>{author.username}</Link>
                 <label>{fromNow(createdAt.toString())}</label>
               </div>
@@ -89,7 +89,7 @@ const Comments = ({ event, comments, loggedUser }: CommentsProps) => {
           </div>
         ))}
       </div>
-      <div className={styles["view-event__comments__input"]}>
+      <div className={styles["comments__input"]}>
         <UserAvatar user={loggedUser} />
         <TextareaAutosize
           value={comment}

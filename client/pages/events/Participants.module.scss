@@ -1,0 +1,44 @@
+@import "../../styles/variables.scss";
+
+.participants {
+  &__title {
+    margin-top: 1rem;
+    margin-bottom: 0.5rem;
+    display: flex;
+    align-items: center;
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: $green;
+  }
+
+  &__count {
+    margin-left: 0.3rem;
+    font-size: 1rem;
+  }
+
+  &__empty {
+    font-style: italic;
+  }
+
+  &__container {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.5rem;
+  }
+}
+
+.participate {
+  background-color: $green-darker;
+  color: white;
+
+  svg {
+    height: 16px;
+    width: 16px;
+    margin-right: 0.5rem;
+  }
+
+  &:hover {
+    background-color: $green-darkest;
+  }
+}
