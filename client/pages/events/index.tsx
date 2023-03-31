@@ -44,6 +44,8 @@ export const EVENT_CONTENT_FRAGMENT = gql`
       author {
         id
         username
+        pictureUrl
+        color
       }
     }
   }

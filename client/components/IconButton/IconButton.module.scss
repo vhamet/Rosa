@@ -1,7 +1,6 @@
 @import "../../styles/variables.scss";
 .icon-button {
   width: fit-content;
-  padding: 0.3rem;
   color: $green-darker;
   transition: all 0.3s ease 0s;
   cursor: pointer;
@@ -12,6 +11,7 @@
   }
 
   &.background {
+    padding: 0.3rem;
     border-radius: 50px;
     padding: 0.8rem;
     background-color: white;

@@ -8,6 +8,17 @@ import { Comment } from './comment.model';
 export class CommentService {
   constructor(private prisma: PrismaService) {}
 
+  async getComment(id: number): Promise<Comment> {
+    const comment = await this.prisma.comment.findUnique({
+      where: { id },
+      include: {
+        author: true,
+      },
+    });
+
+    return { ...comment };
+  }
+
   async createComment({
     eventId,
     content,
@@ -20,5 +31,13 @@ export class CommentService {
         userId,
       },
     });
+  }
+
+  async deleteComment(id: number): Promise<boolean> {
+    await this.prisma.comment.delete({
+      where: { id },
+    });
+
+    return true;
   }
 }

@@ -1,5 +1,9 @@
 import { Args, Mutation, Resolver } from '@nestjs/graphql';
-import { NotFoundException, UseGuards } from '@nestjs/common';
+import {
+  NotFoundException,
+  UnauthorizedException,
+  UseGuards,
+} from '@nestjs/common';
 
 import { Comment } from './comment.model';
 import { CommentService } from './comment.service';
@@ -33,5 +37,28 @@ export class CommentResolver {
     });
 
     return { ...comment, author: user };
+  }
+
+  @Mutation(() => Boolean)
+  @UseGuards(JwtGuard)
+  async deleteComment(
+    @Args('commentId') commentId: number,
+    @CurrentGqlUser() user: User,
+  ): Promise<boolean> {
+    const comment = await this.commentService.getComment(commentId);
+    if (!comment) {
+      throw new NotFoundException({
+        error: `Comment with id ${commentId} does not exist`,
+      });
+    }
+
+    if (comment.author.id !== user.id) {
+      throw new UnauthorizedException({
+        error: 'You are not allowed to delete this comment',
+      });
+    }
+    await this.commentService.deleteComment(commentId);
+
+    return true;
   }
 }

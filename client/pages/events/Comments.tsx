@@ -1,15 +1,25 @@
 import { KeyboardEvent, useState } from "react";
+import Link from "next/link";
 import { gql, useMutation } from "@apollo/client";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faPaperPlane } from "@fortawesome/free-solid-svg-icons";
+import {
+  faPaperPlane,
+  faTrash,
+  faPenToSquare,
+} from "@fortawesome/free-solid-svg-icons";
 import TextareaAutosize from "react-textarea-autosize";
 
 import { Comment, Event, User } from "../../utils/types";
 import { fromNow } from "../../utils/dates";
-import Link from "next/link";
 import UserAvatar from "../../components/UserAvatar";
+import IconButton, {
+  IconButtonKind,
+  IconButtonSize,
+} from "../../components/IconButton";
+import Modal from "../../components/Modal";
 
 import styles from "./Comments.module.scss";
+import Button, { ButtonKind } from "../../components/Button";
 
 const CREATE_COMMENT_MUTATION = gql`
   mutation CreateComment($eventId: Float!, $content: String!) {
@@ -21,8 +31,15 @@ const CREATE_COMMENT_MUTATION = gql`
         id
         username
         pictureUrl
+        color
       }
     }
+  }
+`;
+
+const DELETE_COMMENT_MUTATION = gql`
+  mutation DeleteComment($commentId: Float!) {
+    deleteComment(commentId: $commentId)
   }
 `;
 
@@ -57,6 +74,28 @@ const Comments = ({ event, comments, loggedUser }: CommentsProps) => {
     }
   };
 
+  const [deleting, setDeleting] = useState<number | null>(null);
+  const [deleteComment] = useMutation(DELETE_COMMENT_MUTATION, {
+    variables: { commentId: deleting },
+    onCompleted: () => setDeleting(null),
+    update: (cache) => {
+      cache.modify({
+        id: cache.identify(event),
+        fields: {
+          comments(cachedComments, { readField }) {
+            return cachedComments.filter(
+              (commentRef) => deleting !== readField("id", commentRef)
+            );
+          },
+        },
+      });
+
+      const normalizedId = cache.identify({ deleting, __typename: "Comment" });
+      cache.evict({ id: normalizedId });
+      cache.gc();
+    },
+  });
+
   const handleKeyDown = (event: KeyboardEvent<HTMLTextAreaElement>) => {
     if (event.key === "Enter" && !event.shiftKey) {
       event.preventDefault();
@@ -65,31 +104,57 @@ const Comments = ({ event, comments, loggedUser }: CommentsProps) => {
   };
 
   return (
-    <div className={styles["comments"]}>
-      <div className={styles["comments__container"]}>
+    <div className={styles.comments}>
+      <div className={styles.comments__container}>
         {comments.map(({ id, content, createdAt, author }) => (
           <div
             key={id}
-            className={`${styles["comments__comment"]} ${
+            className={`${styles.comment} ${
               author.id === loggedUser.id ? styles.own : ""
             }`}
           >
-            <UserAvatar user={loggedUser} />
             <div
-              className={`${styles["comments__content"]} ${
+              className={`${styles.comment__container} ${
                 author.id === loggedUser.id ? styles.own : ""
               }`}
             >
-              <div className={styles["comments__info"]}>
-                <Link href={`/user/${author.id}`}>{author.username}</Link>
-                <label>{fromNow(createdAt.toString())}</label>
+              <UserAvatar user={author} />
+              <div
+                className={`${styles.comment__content} ${
+                  author.id === loggedUser.id ? styles.own : ""
+                }`}
+              >
+                <div className={styles.comment__info}>
+                  <label
+                    className={author.color ? styles.colored : ""}
+                    style={author.color ? { color: author.color } : {}}
+                  >
+                    <Link href={`/user/${author.id}`}>{author.username}</Link>
+                  </label>
+                  <label>{fromNow(createdAt.toString())}</label>
+                </div>
+                <div>{content}</div>
               </div>
-              <div>{content}</div>
             </div>
+            {loggedUser.id === author.id && (
+              <div className={styles.comment__actions}>
+                <IconButton
+                  icon={faTrash}
+                  kind={IconButtonKind.danger}
+                  size={IconButtonSize.small}
+                  onClick={() => setDeleting(id)}
+                />
+                <IconButton
+                  icon={faPenToSquare}
+                  size={IconButtonSize.small}
+                  onClick={submitComment}
+                />
+              </div>
+            )}
           </div>
         ))}
       </div>
-      <div className={styles["comments__input"]}>
+      <div className={styles.comments__input}>
         <UserAvatar user={loggedUser} />
         <TextareaAutosize
           value={comment}
@@ -100,6 +165,27 @@ const Comments = ({ event, comments, loggedUser }: CommentsProps) => {
         />
         <FontAwesomeIcon icon={faPaperPlane} onClick={submitComment} />
       </div>
+      <Modal visible={!!deleting} onClose={() => setDeleting(null)}>
+        <div className={styles["comments__modal"]}>
+          <div>Delete comment</div>
+          <div>
+            Are you sure you want to delete this comment ? This action is
+            irreversible !
+          </div>
+          <div className={styles["comments__modal__actions"]}>
+            <Button
+              kind={ButtonKind.secondary}
+              onClick={() => setDeleting(null)}
+              label="Cancel"
+            />
+            <Button
+              kind={ButtonKind.danger}
+              onClick={deleteComment}
+              label="Confirm"
+            />
+          </div>
+        </div>
+      </Modal>
     </div>
   );
 };
