@@ -40,4 +40,15 @@ export class CommentService {
 
     return true;
   }
+
+  async updateComment(commentId: number, content: string): Promise<Comment> {
+    const comment = await this.prisma.comment.update({
+      where: { id: commentId },
+      data: {
+        content,
+      },
+    });
+
+    return comment;
+  }
 }

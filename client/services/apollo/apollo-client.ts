@@ -51,6 +51,9 @@ const createApolloClient = (context) => {
         Event: {
           keyFields: ["id"],
         },
+        Comment: {
+          keyFields: ["id"],
+        },
       },
     }),
   });

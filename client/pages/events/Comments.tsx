@@ -6,6 +6,8 @@ import {
   faPaperPlane,
   faTrash,
   faPenToSquare,
+  faCheck,
+  faBan,
 } from "@fortawesome/free-solid-svg-icons";
 import TextareaAutosize from "react-textarea-autosize";
 
@@ -33,6 +35,15 @@ const CREATE_COMMENT_MUTATION = gql`
         pictureUrl
         color
       }
+    }
+  }
+`;
+
+const UPDATE_COMMENT = gql`
+  mutation UpdateComment($commentId: Float!, $content: String!) {
+    updateComment(commentId: $commentId, content: $content) {
+      id
+      content
     }
   }
 `;
@@ -73,6 +84,16 @@ const Comments = ({ event, comments, loggedUser }: CommentsProps) => {
       });
     }
   };
+
+  const [updating, setUpdating] = useState<number | null>(null);
+  const [commentUpdate, setCommentUpdate] = useState<string | null>(null);
+  const [updateComment] = useMutation(UPDATE_COMMENT, {
+    onError: (error) => console.error(error),
+    onCompleted: () => {
+      setUpdating(null);
+      setCommentUpdate(null);
+    },
+  });
 
   const [deleting, setDeleting] = useState<number | null>(null);
   const [deleteComment] = useMutation(DELETE_COMMENT_MUTATION, {
@@ -133,10 +154,21 @@ const Comments = ({ event, comments, loggedUser }: CommentsProps) => {
                   </label>
                   <label>{fromNow(createdAt.toString())}</label>
                 </div>
-                <div>{content}</div>
+                <div>
+                  {updating === id ? (
+                    <TextareaAutosize
+                      value={commentUpdate}
+                      onChange={(e) => setCommentUpdate(e.target.value)}
+                      maxRows={2}
+                      className={styles.textarea}
+                    />
+                  ) : (
+                    content
+                  )}
+                </div>
               </div>
             </div>
-            {loggedUser.id === author.id && (
+            {loggedUser.id === author.id && !updating && (
               <div className={styles.comment__actions}>
                 <IconButton
                   icon={faTrash}
@@ -147,7 +179,32 @@ const Comments = ({ event, comments, loggedUser }: CommentsProps) => {
                 <IconButton
                   icon={faPenToSquare}
                   size={IconButtonSize.small}
-                  onClick={submitComment}
+                  onClick={() => {
+                    setUpdating(id);
+                    setCommentUpdate(content);
+                  }}
+                />
+              </div>
+            )}
+            {updating === id && (
+              <div
+                className={styles.comment__actions}
+                style={{ visibility: "visible" }}
+              >
+                <IconButton
+                  icon={faBan}
+                  kind={IconButtonKind.danger}
+                  size={IconButtonSize.small}
+                  onClick={() => setUpdating(null)}
+                />
+                <IconButton
+                  icon={faCheck}
+                  size={IconButtonSize.small}
+                  onClick={() =>
+                    updateComment({
+                      variables: { commentId: id, content: commentUpdate },
+                    })
+                  }
                 />
               </div>
             )}
@@ -162,6 +219,7 @@ const Comments = ({ event, comments, loggedUser }: CommentsProps) => {
           onChange={(e) => setComment(e.target.value)}
           placeholder="Write a comment..."
           maxRows={5}
+          className={styles.textarea}
         />
         <FontAwesomeIcon icon={faPaperPlane} onClick={submitComment} />
       </div>

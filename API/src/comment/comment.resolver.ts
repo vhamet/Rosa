@@ -61,4 +61,31 @@ export class CommentResolver {
 
     return true;
   }
+
+  @Mutation(() => Comment)
+  @UseGuards(JwtGuard)
+  async updateComment(
+    @Args('commentId') commentId: number,
+    @Args('content') content: string,
+    @CurrentGqlUser() user: User,
+  ): Promise<Comment> {
+    const comment = await this.commentService.getComment(commentId);
+    if (!comment) {
+      throw new NotFoundException(
+        `Comment with id ${commentId} does not exists`,
+      );
+    }
+    if (comment.author.id !== user.id) {
+      throw new UnauthorizedException(
+        'You don not have permission to update this comment',
+      );
+    }
+
+    const updatedComment = await this.commentService.updateComment(
+      commentId,
+      content,
+    );
+
+    return { ...updatedComment };
+  }
 }
