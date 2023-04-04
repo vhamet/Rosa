@@ -8,6 +8,13 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+enum Role {
+  GUEST
+  ALUMNI
+  RESIDENT
+  ADMIN
+}
+
 model User {
   id          Int      @id @default(autoincrement())
   username    String   @unique()
@@ -16,12 +23,11 @@ model User {
   password    String
   pictureUrl  String?
   color       String?
+  role    Role     @default(GUEST)
 
   eventsCreated Event[] @relation("eventsCreated")
   participating Participating[]
   comments Comment[]
-
-
 }
 
 model Event {

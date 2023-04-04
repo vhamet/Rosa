@@ -33,6 +33,12 @@
     flex-direction: column;
   }
 
+  &__header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
   &__name {
     font-size: 1.5rem;
     color: $orange;

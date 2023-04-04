@@ -2,6 +2,7 @@ import { ObjectType, Field, Int } from '@nestjs/graphql';
 import {
   User as UserClient,
   Participating as ParticipatingClient,
+  Role,
 } from '@prisma/client';
 import { PartialBy } from 'src/utils/types';
 
@@ -36,6 +37,9 @@ export class User implements SafeUserClient {
     nullable: true,
   })
   password?: string;
+
+  @Field(() => String)
+  role: Role;
 }
 
 @ObjectType()

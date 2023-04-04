@@ -11,8 +11,11 @@ import {
   addApolloState,
   initializeApollo,
 } from "../../services/apollo/apollo-client";
+import { capitalize } from "../../utils/utils";
 
 import styles from "./users.module.scss";
+import Tag, { getRoleStyle } from "../../components/Tag";
+import { User } from "../../utils/types";
 
 const USERS_QUERY = gql`
   query {
@@ -23,6 +26,7 @@ const USERS_QUERY = gql`
       phone
       pictureUrl
       color
+      role
     }
   }
 `;
@@ -68,7 +72,7 @@ const Users = () => {
         <h1>Members</h1>
         <table>
           <tbody>
-            {data?.users.map((user) => (
+            {data?.users.map((user: User) => (
               <tr key={user.id}>
                 <td className={styles.users__user}>
                   <UserAvatar user={user} size={AvatarSize.large} />
@@ -85,7 +89,11 @@ const Users = () => {
                     </label>
                   </div>
                 </td>
-                <td>Resident</td>
+                <td>
+                  <Tag style={getRoleStyle(user.role)} shallow>
+                    {capitalize(user.role)}
+                  </Tag>
+                </td>
               </tr>
             ))}
           </tbody>

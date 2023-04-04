@@ -1,3 +1,5 @@
+import { Role } from "./const";
+
 export type RequireOnlyOne<T, Keys extends keyof T = keyof T> = Pick<
   T,
   Exclude<keyof T, Keys>
@@ -22,6 +24,7 @@ export type User = {
   phone?: string;
   pictureUrl?: string;
   color?: string;
+  role?: Role;
 };
 
 export type Comment = {

@@ -28,6 +28,7 @@ export type ProfileData = {
   phone?: string;
   color?: string;
   picture?: File;
+  role: string;
 };
 
 export const USER_QUERY = gql`
@@ -39,6 +40,7 @@ export const USER_QUERY = gql`
       createdAt
       pictureUrl
       color
+      role
     }
   }
 `;

@@ -5,6 +5,7 @@
   padding: 0.2rem 0.5rem;
   display: flex;
   align-items: center;
+  justify-content: center;
   background-color: $orange-lightest;
   border-radius: 8px;
   box-shadow: 0 4px 4px -2px $black-lighter;
@@ -22,5 +23,33 @@
     * {
       cursor: pointer;
     }
+  }
+
+  &.shallow {
+    padding:  0.1rem 0.5rem;
+    background-color: white;
+    color: $green-darker;
+    border: 2px solid $green-darker;
+    box-shadow: none;
+  }
+
+  &.danger {
+    color: $danger;
+    border-color: $danger;
+  }
+
+  &.warning {
+    color: $warning;
+    border-color: $warning;
+  }
+
+  &.info {
+    color: $info;
+    border-color: $info;
+  }
+
+  &.success {
+    color: $success;
+    border-color: $success;
   }
 }
