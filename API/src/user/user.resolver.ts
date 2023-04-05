@@ -1,6 +1,7 @@
 import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
 import {
   ConflictException,
+  ForbiddenException,
   NotFoundException,
   UnauthorizedException,
   UseGuards,
@@ -12,6 +13,7 @@ import { UserService } from './user.service';
 import { JwtGuard } from 'src/auth/auth.guard';
 import { CurrentGqlUser } from './user.decorator';
 import { UserUpdateInput } from './user.input';
+import { Role } from '@prisma/client';
 
 @Resolver(() => User)
 export class UserResolver {
@@ -58,6 +60,28 @@ export class UserResolver {
       phone,
       color,
     });
+
+    return updatedUser;
+  }
+
+  @Mutation(() => User)
+  @UseGuards(JwtGuard)
+  async updateRole(
+    @Args('userId') userId: number,
+    @Args('role') role: Role,
+    @CurrentGqlUser() currentUser: User,
+  ): Promise<User> {
+    if (currentUser?.role !== Role.ADMIN) {
+      throw new ForbiddenException(
+        `You are not allowed to update a user's role`,
+      );
+    }
+    const user = await this.userService.getUserById(userId);
+    if (!user) {
+      throw new NotFoundException(`User with id ${userId} does not exists.`);
+    }
+
+    const updatedUser = await this.userService.updateRole(userId, role);
 
     return updatedUser;
   }

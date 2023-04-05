@@ -1,4 +1,4 @@
-import { gql, useQuery } from "@apollo/client";
+import { gql, useMutation, useQuery } from "@apollo/client";
 import Head from "next/head";
 import Link from "next/link";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -12,10 +12,13 @@ import {
   initializeApollo,
 } from "../../services/apollo/apollo-client";
 import { capitalize } from "../../utils/utils";
-
-import styles from "./users.module.scss";
 import Tag, { getRoleStyle } from "../../components/Tag";
 import { User } from "../../utils/types";
+import { ACCESS_TOKEN, ROLE_OPTIONS, Role } from "../../utils/const";
+import Dropdown from "../../components/Dropdown";
+import jwtDecode from "jwt-decode";
+
+import styles from "./users.module.scss";
 
 const USERS_QUERY = gql`
   query {
@@ -31,7 +34,19 @@ const USERS_QUERY = gql`
   }
 `;
 
+const ROLE_MUTATION = gql`
+  mutation UpdateRole($userId: Float!, $role: String!) {
+    updateRole(userId: $userId, role: $role) {
+      id
+      role
+    }
+  }
+`;
+
 export const getServerSideProps = async (context) => {
+  const token = context.req?.cookies?.[ACCESS_TOKEN];
+  const auth = token && jwtDecode(token);
+
   let props = {};
   if (context) {
     const apolloClient = initializeApollo({ context });
@@ -39,7 +54,7 @@ export const getServerSideProps = async (context) => {
       const { data } = await apolloClient.query({
         query: USERS_QUERY,
       });
-      props = { pastEvents: data.users };
+      props = { pastEvents: data.users, auth };
     } catch (error) {
       const gqlError = error.graphQLErrors[0];
       if (gqlError) {
@@ -51,8 +66,10 @@ export const getServerSideProps = async (context) => {
   }
 };
 
-const Users = () => {
+const Users = ({ auth }) => {
   const { loading, error, data } = useQuery(USERS_QUERY);
+
+  const [updateRole] = useMutation(ROLE_MUTATION);
 
   if (loading) {
     return <p>Loading...</p>;
@@ -90,9 +107,22 @@ const Users = () => {
                   </div>
                 </td>
                 <td>
-                  <Tag style={getRoleStyle(user.role)} shallow>
-                    {capitalize(user.role)}
-                  </Tag>
+                  {auth?.role === Role.ADMIN ? (
+                    <Dropdown
+                      options={ROLE_OPTIONS}
+                      onChange={(selection) =>
+                        updateRole({
+                          variables: { userId: user.id, role: selection },
+                        })
+                      }
+                      defaultSelection={user.role}
+                      rightAlign
+                    />
+                  ) : (
+                    <Tag style={getRoleStyle(user.role)} shallow>
+                      {capitalize(user.role)}
+                    </Tag>
+                  )}
                 </td>
               </tr>
             ))}

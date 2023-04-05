@@ -1,9 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { User as PrismaUser } from '@prisma/client';
-import { createWriteStream, unlink } from 'fs';
-import * as path from 'path';
-import { v4 as generateUuid } from 'uuid';
-import * as mime from 'mime-types';
+import { Role, User as PrismaUser } from '@prisma/client';
 
 import { PrismaService } from '../prisma.service';
 import { UserCreateInput } from './user.input';
@@ -79,6 +75,17 @@ export class UserService {
         id: idUser,
       },
       data: userData,
+    });
+
+    return this.userWithoutPassword(updatedUser);
+  }
+
+  async updateRole(idUser: number, role: Role): Promise<User> {
+    const updatedUser = await this.prisma.user.update({
+      where: {
+        id: idUser,
+      },
+      data: { role },
     });
 
     return this.userWithoutPassword(updatedUser);
