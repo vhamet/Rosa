@@ -1,5 +1,6 @@
 import Cookies from "js-cookie";
 import { ACCESS_TOKEN } from "./const";
+import { DropdownOption } from "./types";
 
 export const isSSR = () => typeof window === "undefined";
 
@@ -40,3 +41,9 @@ export const updatePicture = async (
 export const capitalize = (string) => {
   return string.charAt(0).toUpperCase() + string.slice(1).toLowerCase();
 };
+
+export const buildOptionsFromEnum = (_enum): DropdownOption[] =>
+  Object.keys(_enum).map((key) => ({
+    key,
+    label: capitalize(key),
+  }));

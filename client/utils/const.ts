@@ -1,4 +1,4 @@
-import { capitalize } from "./utils";
+import { buildOptionsFromEnum, capitalize } from "./utils";
 
 export const ACCESS_TOKEN = "ACCESS_TOKEN";
 
@@ -9,7 +9,12 @@ export enum Role {
   ADMIN = "ADMIN",
 }
 
-export const ROLE_OPTIONS = Object.keys(Role).map((key) => ({
-  key,
-  label: capitalize(key),
-}));
+export const ROLE_OPTIONS = buildOptionsFromEnum(Role);
+
+export enum Privacy {
+  PUBLIC = "PUBLIC",
+  ALUMNI = "ALUMNI",
+  RESIDENT = "RESIDENT",
+}
+
+export const PRIVACY_OPTIONS = buildOptionsFromEnum(Privacy);

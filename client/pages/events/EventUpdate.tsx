@@ -15,6 +15,7 @@ const UPDATE_EVENT = gql`
     $description: String
     $start: String
     $end: String
+    $privacy: String
   ) {
     updateEvent(
       eventId: $eventId
@@ -22,6 +23,7 @@ const UPDATE_EVENT = gql`
       description: $description
       start: $start
       end: $end
+      privacy: $privacy
     ) {
       id
       title
@@ -29,6 +31,7 @@ const UPDATE_EVENT = gql`
       start
       end
       pictureUrl
+      privacy
     }
   }
 `;

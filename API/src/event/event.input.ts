@@ -1,4 +1,5 @@
 import { Field, InputType } from '@nestjs/graphql';
+import { Privacy } from '@prisma/client';
 
 @InputType()
 export class EventCreateInput {
@@ -18,6 +19,9 @@ export class EventCreateInput {
 
   @Field(() => String)
   pictureUrl: string;
+
+  @Field(() => Privacy)
+  privacy: Privacy;
 
   @Field(() => Number)
   userId: number;
@@ -39,6 +43,6 @@ export class EventUpdateInput {
   @Field(() => String)
   end: string;
 
-  @Field(() => Number)
-  userId: number;
+  @Field(() => Privacy)
+  privacy: Privacy;
 }

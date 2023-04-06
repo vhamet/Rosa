@@ -9,17 +9,25 @@ import {
   UseFormSetValue,
 } from "react-hook-form";
 import DateInput from "../DateInput";
-import { RequireOnlyOne } from "../../utils/types";
+import { DropdownOption, RequireOnlyOne } from "../../utils/types";
 
 import styles from "./FormInput.module.scss";
 import ColorInput from "../ColorInput";
+import DropdownInput from "../DropdownInput";
+
+enum FormInputType {
+  textarea,
+  date,
+  color,
+  dropdown,
+}
 
 interface FormInputInterface {
   name: string;
   label?: string;
   placeholder?: string;
   error?: FieldError | Merge<FieldError, FieldErrorsImpl<any>>;
-  type?: string;
+  type?: FormInputType | string;
   register: UseFormRegister<FieldValues>;
   control?: Control<FieldValues, any>;
   options?: RegisterOptions;
@@ -27,6 +35,7 @@ interface FormInputInterface {
   defaultValue?: any;
   minDate?: Date;
   withTime?: boolean;
+  dropdownOptions?: DropdownOption[];
 }
 
 type FormInputProps = RequireOnlyOne<
@@ -47,6 +56,7 @@ const FormInput = ({
   defaultValue,
   minDate,
   withTime,
+  dropdownOptions,
 }: FormInputProps) => {
   let input;
   switch (type) {
@@ -81,10 +91,20 @@ const FormInput = ({
         />
       );
       break;
+    case "dropdown":
+      input = (
+        <DropdownInput
+          name={name}
+          control={control}
+          defaultValue={defaultValue}
+          options={dropdownOptions}
+        />
+      );
+      break;
     default:
       input = (
         <input
-          type={type || "text"}
+          type={type?.toString() || "text"}
           {...register(name, options)}
           placeholder={placeholder}
           defaultValue={defaultValue}

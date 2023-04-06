@@ -28,6 +28,7 @@ export const EVENT_CONTENT_FRAGMENT = gql`
     start
     end
     pictureUrl
+    privacy
     createdAt
     createdBy {
       id

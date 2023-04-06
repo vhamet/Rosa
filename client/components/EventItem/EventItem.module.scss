@@ -18,6 +18,23 @@
     object-fit: cover;
   }
 
+  &__header {
+    width: 100%;
+    display: flex;
+    align-items: baseline;
+
+    > svg {
+      margin-left: auto;
+      color: $orange;
+    }
+
+    > label {
+      margin-left: 0.3rem;
+      font-size: 0.825rem;
+      color: $orange;
+    }
+  }
+
   &__title {
     margin-bottom: 1.25rem;
     font-size: 1.75rem;

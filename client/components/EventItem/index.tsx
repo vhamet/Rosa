@@ -1,9 +1,13 @@
 import { useRouter } from "next/router";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faLock, faLockOpen } from "@fortawesome/free-solid-svg-icons";
 
+import EventDate from "../EventDate";
+import Card from "../Card";
 import { fromNow } from "../../utils/dates";
 import { EventItemProps } from "../../utils/types";
-import Card from "../Card";
-import EventDate from "../EventDate";
+import { Privacy } from "../../utils/const";
+import { capitalize } from "../../utils/utils";
 
 import styles from "./EventItem.module.scss";
 
@@ -19,6 +23,7 @@ const EventItem = ({
     participants,
     comments,
     pictureUrl,
+    privacy,
   },
 }: EventItemProps) => {
   const router = useRouter();
@@ -38,7 +43,15 @@ const EventItem = ({
             currentTarget.src = "sou.jpeg";
           }}
         />
-        <EventDate start={start} end={end} />
+        <div className={styles["event-item__header"]}>
+          <EventDate start={start} end={end} />
+          {
+            <FontAwesomeIcon
+              icon={privacy === Privacy.PUBLIC ? faLockOpen : faLock}
+            />
+          }
+          <label>{capitalize(privacy)}</label>
+        </div>
         <div className={styles["event-item__title"]}>{title}</div>
         <div className={styles["event-item__description"]}>{description}</div>
         <div className={styles["event-item__information"]}>

@@ -4,6 +4,7 @@ import Button from "../../components/Button";
 import FormInput from "../../components/FormInput";
 import ImageInput, { ImageInputSize } from "../../components/ImageInput";
 import { Event } from "../../utils/types";
+import { PRIVACY_OPTIONS } from "../../utils/const";
 
 import styles from "./EventForm.module.scss";
 
@@ -79,6 +80,14 @@ const EventForm = ({ event, onSubmit, confirmLabel }: EventFormProps) => {
         }
         minDate={watchStart || new Date()}
         withTime
+      />
+      <FormInput
+        name="privacy"
+        label="Privacy"
+        error={errors.privacy}
+        control={control}
+        type="dropdown"
+        dropdownOptions={PRIVACY_OPTIONS}
       />
       <Button label={confirmLabel || "Confirm"} />
     </form>

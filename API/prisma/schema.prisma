@@ -15,6 +15,12 @@ enum Role {
   ADMIN
 }
 
+enum Privacy {
+  PUBLIC
+  ALUMNI
+  RESIDENT
+}
+
 model User {
   id          Int      @id @default(autoincrement())
   username    String   @unique()
@@ -38,6 +44,7 @@ model Event {
   start DateTime?
   end DateTime?
   pictureUrl  String?
+  privacy    Privacy     @default(RESIDENT)
 
   createdBy   User @relation(fields: [userId], references: [id], name: "eventsCreated")
   userId Int

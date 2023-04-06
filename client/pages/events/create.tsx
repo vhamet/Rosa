@@ -18,6 +18,7 @@ const CREATE_EVENT = gql`
     $start: String
     $end: String
     $pictureUrl: String
+    $privacy: String
   ) {
     createEvent(
       title: $title
@@ -25,6 +26,7 @@ const CREATE_EVENT = gql`
       start: $start
       end: $end
       pictureUrl: $pictureUrl
+      privacy: $privacy
     ) {
       id
       title
@@ -32,6 +34,7 @@ const CREATE_EVENT = gql`
       start
       end
       pictureUrl
+      privacy
       createdAt
       createdBy {
         id

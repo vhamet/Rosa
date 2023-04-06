@@ -3,13 +3,9 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faChevronUp } from "@fortawesome/free-solid-svg-icons";
 
 import useClickOutside from "../hooks/useClickOutside";
+import { DropdownOption } from "../../utils/types";
 
 import styles from "./Dropdown.module.scss";
-
-type DropdownOption = {
-  key: string;
-  label: string;
-};
 
 type DropdownProps = {
   options: DropdownOption[];
@@ -66,7 +62,9 @@ const Dropdown = ({
           <div
             key={option.key}
             className={`${styles.dropdown__option} ${
-              option.key === selectedOption.key ? styles.dropdown__selected : ""
+              option.key === selectedOption?.key
+                ? styles.dropdown__selected
+                : ""
             }`}
             onClick={() => handleSelection(option)}
           >

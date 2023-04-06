@@ -7,7 +7,13 @@ import { EventCreateInput, EventUpdateInput } from './event.input';
 import { Event } from './event.model';
 
 const SAFE_USER_FIELDS = {
-  select: { id: true, username: true, createdAt: true, phone: true },
+  select: {
+    id: true,
+    username: true,
+    createdAt: true,
+    phone: true,
+    role: true,
+  },
 };
 
 const eventIncludes = {
@@ -40,6 +46,7 @@ export class EventService {
     end,
     userId,
     pictureUrl,
+    privacy,
   }: EventCreateInput): Promise<Event> {
     const event = await this.prisma.event.create({
       data: {
@@ -49,6 +56,7 @@ export class EventService {
         end: end && moment(end, 'YYYY-MM-DDTHH:mm').add(2, 'hours').toDate(),
         userId,
         pictureUrl,
+        privacy,
       },
       include: {
         participants: {
@@ -172,7 +180,7 @@ export class EventService {
 
   async updateEvent(
     eventId: number,
-    { title, description, start, end, userId }: EventUpdateInput,
+    { title, description, start, end, privacy }: EventUpdateInput,
   ): Promise<Event> {
     const event = await this.prisma.event.update({
       where: { id: eventId },
@@ -181,7 +189,7 @@ export class EventService {
         description,
         start: moment(start, 'YYYY-MM-DDTHH:mm').add(2, 'hours').toDate(),
         end: end && moment(end, 'YYYY-MM-DDTHH:mm').add(2, 'hours').toDate(),
-        userId,
+        privacy,
       },
     });
 

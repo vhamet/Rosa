@@ -1,7 +1,13 @@
 import { useState } from "react";
 import { useRouter } from "next/router";
 import { gql, useMutation } from "@apollo/client";
-import { faTrash, faPenToSquare } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import {
+  faTrash,
+  faPenToSquare,
+  faLock,
+  faLockOpen,
+} from "@fortawesome/free-solid-svg-icons";
 
 import Button, { ButtonKind } from "../../components/Button";
 import IconButton, {
@@ -14,9 +20,10 @@ import Comments from "./Comments";
 import Card from "../../components/Card";
 import EventDate from "../../components/EventDate";
 import { fromNow } from "../../utils/dates";
-import { isEventOver } from "../../utils/utils";
+import { capitalize, isEventOver } from "../../utils/utils";
 import { Event } from "../../utils/types";
 import { AuthenticationType } from "../../services/authentication/user-context";
+import { Privacy, Role } from "../../utils/const";
 
 import styles from "./EventDetail.module.scss";
 
@@ -42,6 +49,7 @@ const EventDetail = ({ event, auth, onUpdating }: EventDetailProps) => {
     end,
     comments,
     pictureUrl,
+    privacy,
     createdAt,
     createdBy: { id: createdBy, username },
   } = event;
@@ -78,7 +86,15 @@ const EventDetail = ({ event, auth, onUpdating }: EventDetailProps) => {
             Created by {username} {fromNow(createdAt)}
           </div>
         </div>
-        <div className={styles["event-detail__title"]}>{title}</div>
+        <div className={styles["event-detail__title"]}>
+          {title}
+          {
+            <FontAwesomeIcon
+              icon={privacy === Privacy.PUBLIC ? faLockOpen : faLock}
+            />
+          }
+          <label>{capitalize(privacy)}</label>
+        </div>
         <div className={styles["event-detail__description"]}>{description}</div>
 
         <Participants
@@ -89,23 +105,24 @@ const EventDetail = ({ event, auth, onUpdating }: EventDetailProps) => {
 
         <Comments event={event} comments={comments} loggedUser={auth} />
 
-        {auth.id === createdBy && (
-          <div className={styles["event-detail__actions"]}>
-            <IconButton
-              icon={faPenToSquare}
-              size={IconButtonSize.medium}
-              onClick={onUpdating}
-              withBackground
-            />
-            <IconButton
-              icon={faTrash}
-              size={IconButtonSize.medium}
-              kind={IconButtonKind.danger}
-              onClick={() => setDeleting(true)}
-              withBackground
-            />
-          </div>
-        )}
+        {auth.id === createdBy ||
+          (auth.role === Role.ADMIN && (
+            <div className={styles["event-detail__actions"]}>
+              <IconButton
+                icon={faPenToSquare}
+                size={IconButtonSize.medium}
+                onClick={onUpdating}
+                withBackground
+              />
+              <IconButton
+                icon={faTrash}
+                size={IconButtonSize.medium}
+                kind={IconButtonKind.danger}
+                onClick={() => setDeleting(true)}
+                withBackground
+              />
+            </div>
+          ))}
       </Card>
       <Modal visible={deleting} onClose={() => setDeleting(false)}>
         <div className={styles["event-detail__modal"]}>

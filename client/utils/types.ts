@@ -1,4 +1,4 @@
-import { Role } from "./const";
+import { Privacy, Role } from "./const";
 
 export type RequireOnlyOne<T, Keys extends keyof T = keyof T> = Pick<
   T,
@@ -45,5 +45,11 @@ export type Event = {
   participants: User[];
   comments: Comment[];
   pictureUrl: string;
+  privacy: Privacy;
 };
 export type EventItemProps = { event: Event };
+
+export type DropdownOption = {
+  key: string;
+  label: string;
+};

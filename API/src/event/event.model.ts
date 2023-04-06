@@ -1,5 +1,5 @@
 import { ObjectType, Field, Int } from '@nestjs/graphql';
-import { Event as EventClient } from '@prisma/client';
+import { Event as EventClient, Privacy } from '@prisma/client';
 import { User } from 'src/user/user.model';
 import { Comment } from '../comment/comment.model';
 
@@ -33,6 +33,9 @@ export class Event implements EventClient {
     nullable: true,
   })
   pictureUrl: string;
+
+  @Field(() => String)
+  privacy: Privacy;
 
   @Field(() => User)
   createdBy?: User;
