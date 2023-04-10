@@ -17,9 +17,11 @@ import Profile from "./Profile";
 import UpdateProfile from "./UpdateProfile";
 import { ACCESS_TOKEN } from "../../utils/const";
 import useUserContext, {
+  AuthenticationType,
   UserReducerActions,
 } from "../../services/authentication/user-context";
 import { updatePicture } from "../../utils/utils";
+import { User } from "../../utils/types";
 
 import styles from "./[id].module.scss";
 
@@ -58,7 +60,7 @@ const UPDATE_PROFILE_MUTATION = gql`
 `;
 
 export const getServerSideProps = async (context) => {
-  let user, auth;
+  let user: User, currentUser: User;
   if (context) {
     const apolloClient = initializeApollo({ context });
     try {
@@ -67,6 +69,14 @@ export const getServerSideProps = async (context) => {
         variables: { id: +context.params.id },
       });
       user = data?.user;
+
+      const token = context.req?.cookies?.[ACCESS_TOKEN];
+      const auth: AuthenticationType = token && jwtDecode(token);
+      const { data: userData } = await apolloClient.query({
+        query: USER_QUERY,
+        variables: { id: auth.id },
+      });
+      currentUser = userData.user;
     } catch (error) {
       const gqlError = error.graphQLErrors?.[0];
       if (gqlError) {
@@ -74,14 +84,11 @@ export const getServerSideProps = async (context) => {
       }
     }
 
-    const token = context.req?.cookies?.[ACCESS_TOKEN];
-    auth = token && jwtDecode(token);
-
-    return addApolloState(apolloClient, { props: { user, auth } });
+    return addApolloState(apolloClient, { props: { user, currentUser } });
   }
 };
 
-const UserProfile = ({ auth }) => {
+const UserProfile = ({ currentUser }) => {
   const router = useRouter();
   const id = +router.query.id;
   const { dispatch } = useUserContext();
@@ -91,9 +98,10 @@ const UserProfile = ({ auth }) => {
   });
 
   const [updateProfile] = useMutation(UPDATE_PROFILE_MUTATION, {
-    onCompleted: () => {
+    onCompleted: (data) => {
       dispatch({
         type: UserReducerActions.update,
+        payload: data.updateProfile,
       });
       setUpdating(false);
     },
@@ -139,7 +147,7 @@ const UserProfile = ({ auth }) => {
           <Profile user={data?.user} />
         )}
       </Card>
-      {id === auth.id && (
+      {id === currentUser.id && (
         <div className={styles["profile__actions"]}>
           {!updating && (
             <Button onClick={() => setUpdating(true)} label="Modify" />

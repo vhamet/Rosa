@@ -21,7 +21,7 @@ import Card from "../../components/Card";
 import EventDate from "../../components/EventDate";
 import { fromNow } from "../../utils/dates";
 import { capitalize, isEventOver } from "../../utils/utils";
-import { Event } from "../../utils/types";
+import { Event, User } from "../../utils/types";
 import { AuthenticationType } from "../../services/authentication/user-context";
 import { Privacy, Role } from "../../utils/const";
 
@@ -35,11 +35,11 @@ const DELETE_EVENT_MUTATION = gql`
 
 type EventDetailProps = {
   event: Event;
-  auth: AuthenticationType;
+  currentUser: User;
   onUpdating: () => void;
 };
 
-const EventDetail = ({ event, auth, onUpdating }: EventDetailProps) => {
+const EventDetail = ({ event, currentUser, onUpdating }: EventDetailProps) => {
   const router = useRouter();
   const {
     id,
@@ -99,14 +99,14 @@ const EventDetail = ({ event, auth, onUpdating }: EventDetailProps) => {
 
         <Participants
           event={event}
-          loggedId={auth.id}
+          loggedId={currentUser.id}
           eventOver={isEventOver(start, end)}
         />
 
-        <Comments event={event} comments={comments} loggedUser={auth} />
+        <Comments event={event} comments={comments} loggedUser={currentUser} />
 
-        {auth.id === createdBy ||
-          (auth.role === Role.ADMIN && (
+        {currentUser.id === createdBy ||
+          (currentUser.role === Role.ADMIN && (
             <div className={styles["event-detail__actions"]}>
               <IconButton
                 icon={faPenToSquare}

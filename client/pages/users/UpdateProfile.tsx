@@ -33,10 +33,7 @@ const UpdateProfile = ({ user, onConfirm, onCancel }: UpdateProfileProps) => {
       <div className={styles["update-profile__image"]}>
         <ImageInput
           name="picture"
-          pictureUrl={
-            user.pictureUrl &&
-            `${process.env.NEXT_PUBLIC_URL_SERVER}${user.pictureUrl}`
-          }
+          pictureUrl={user.pictureUrl}
           setValue={setValue}
           size={ImageInputSize.xlarge}
           style={ImageInputStyle.round}

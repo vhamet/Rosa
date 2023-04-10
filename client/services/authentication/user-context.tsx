@@ -20,7 +20,7 @@ export type AuthenticationType = {
 export type AuthenticationActionType =
   | { type: UserReducerActions.signin; payload: AuthenticationType }
   | { type: UserReducerActions.signout }
-  | { type: UserReducerActions.update };
+  | { type: UserReducerActions.update; payload: AuthenticationType };
 
 export type UserContextType = {
   auth: AuthenticationType;
