@@ -31,9 +31,6 @@ const CREATE_COMMENT_MUTATION = gql`
       createdAt
       author {
         id
-        username
-        pictureUrl
-        color
       }
     }
   }

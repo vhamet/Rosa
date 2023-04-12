@@ -17,6 +17,7 @@ import EventDetail from "./EventDetail";
 import EventUpdate from "./EventUpdate";
 import { USER_QUERY } from "../users/[id]";
 import { AuthenticationType } from "../../services/authentication/user-context";
+import withPrivateRouteHOC from "../../components/withPrivateRouteHOC";
 
 import styles from "./[id].module.scss";
 
@@ -38,7 +39,7 @@ export const getServerSideProps = async (context) => {
         query: EVENT_QUERY,
         variables: { id: +context.params.id },
       });
-      event = data?.event;
+      event = data?.event || null;
 
       const token = context.req?.cookies?.[ACCESS_TOKEN];
       const auth: AuthenticationType = token && jwtDecode(token);
@@ -49,8 +50,14 @@ export const getServerSideProps = async (context) => {
       currentUser = userData.user;
     } catch (error) {
       const gqlError = error.graphQLErrors?.[0];
-      if (gqlError) {
-        console.error({ error });
+      if (gqlError?.extensions?.code === "FORBIDDEN") {
+        return {
+          redirect: {
+            permanent: false,
+            destination: "/signin",
+          },
+          props: {},
+        };
       }
     }
 
@@ -107,4 +114,4 @@ const Event = ({ currentUser }: EventProps) => {
   );
 };
 
-export default Event;
+export default withPrivateRouteHOC(Event);
