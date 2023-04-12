@@ -1,6 +1,8 @@
 import { useRouter } from "next/router";
+
 import { User } from "../../utils/types";
 import Tag from "../Tag";
+import UserAvatar from "../UserAvatar";
 
 import styles from "./UserTag.module.scss";
 
@@ -9,18 +11,17 @@ type UserTagProps = {
   onClick?: () => void;
 };
 
-const UserTag = ({
-  user: { id, username, pictureUrl = "/default_profile_picture.jpeg" },
-  onClick,
-}: UserTagProps) => {
+const UserTag = ({ user, onClick }: UserTagProps) => {
   const router = useRouter();
   return (
     <Tag
       className={styles["user-tag"]}
-      onClick={() => (onClick ? onClick() : router.push(`/users/${id}`))}
+      onClick={() => (onClick ? onClick() : router.push(`/users/${user.id}`))}
     >
-      <img alt="profile" src={pictureUrl} />
-      <label>{username}</label>
+      <UserAvatar user={user} />
+      <label style={user.color ? { color: user.color } : {}}>
+        {user.username}
+      </label>
     </Tag>
   );
 };

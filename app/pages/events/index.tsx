@@ -36,6 +36,8 @@ export const EVENT_CONTENT_FRAGMENT = gql`
     participants {
       id
       username
+      pictureUrl
+      color
     }
     comments {
       id

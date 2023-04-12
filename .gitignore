@@ -6,21 +6,21 @@
 /API/public
 .env
 
-### Client ###
+### App ###
 # dependencies
-/client/.pnp
+/app/.pnp
 .pnp.js
 **/todo.txt
 
 # testing
-/client/coverage
+/app/coverage
 
 # next.js
-/client/.next/
-/client/out/
+/app/.next/
+/app/out/
 
 # production
-/client/build
+/app/build
 
 # misc
 .DS_Store
