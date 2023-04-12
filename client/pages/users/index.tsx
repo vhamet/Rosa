@@ -17,6 +17,8 @@ import { User } from "../../utils/types";
 import { ACCESS_TOKEN, ROLE_OPTIONS, Role } from "../../utils/const";
 import Dropdown from "../../components/Dropdown";
 import jwtDecode from "jwt-decode";
+import { AuthenticationType } from "../../services/authentication/user-context";
+import { USER_QUERY } from "./[id]";
 
 import styles from "./users.module.scss";
 
@@ -44,17 +46,22 @@ const ROLE_MUTATION = gql`
 `;
 
 export const getServerSideProps = async (context) => {
-  const token = context.req?.cookies?.[ACCESS_TOKEN];
-  const auth = token && jwtDecode(token);
-
-  let props = {};
+  let users: User[], currentUser: User;
   if (context) {
     const apolloClient = initializeApollo({ context });
     try {
       const { data } = await apolloClient.query({
         query: USERS_QUERY,
       });
-      props = { pastEvents: data.users, auth };
+      users = data.users;
+
+      const token = context.req?.cookies?.[ACCESS_TOKEN];
+      const auth: AuthenticationType = token && jwtDecode(token);
+      const { data: userData } = await apolloClient.query({
+        query: USER_QUERY,
+        variables: { id: auth.id },
+      });
+      currentUser = userData.user;
     } catch (error) {
       const gqlError = error.graphQLErrors[0];
       if (gqlError) {
@@ -62,11 +69,11 @@ export const getServerSideProps = async (context) => {
       }
     }
 
-    return addApolloState(apolloClient, { props });
+    return addApolloState(apolloClient, { props: { users, currentUser } });
   }
 };
 
-const Users = ({ auth }) => {
+const Users = ({ currentUser }) => {
   const { loading, error, data } = useQuery(USERS_QUERY);
 
   const [updateRole] = useMutation(ROLE_MUTATION);
@@ -107,7 +114,7 @@ const Users = ({ auth }) => {
                   </div>
                 </td>
                 <td>
-                  {auth?.role === Role.ADMIN ? (
+                  {currentUser?.role === Role.ADMIN ? (
                     <Dropdown
                       options={ROLE_OPTIONS}
                       onChange={(selection) =>

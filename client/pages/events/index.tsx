@@ -11,7 +11,6 @@ import {
   addApolloState,
   initializeApollo,
 } from "../../services/apollo/apollo-client";
-import { Event } from "../../utils/types";
 
 import styles from "./events.module.scss";
 
@@ -134,6 +133,7 @@ const Events = () => {
       ),
     },
   ];
+
   return (
     <div className={styles.events}>
       <Head>

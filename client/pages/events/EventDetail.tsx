@@ -22,7 +22,6 @@ import EventDate from "../../components/EventDate";
 import { fromNow } from "../../utils/dates";
 import { capitalize, isEventOver } from "../../utils/utils";
 import { Event, User } from "../../utils/types";
-import { AuthenticationType } from "../../services/authentication/user-context";
 import { Privacy, Role } from "../../utils/const";
 
 import styles from "./EventDetail.module.scss";

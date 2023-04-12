@@ -76,7 +76,13 @@ export const initializeApollo = ({
       arrayMerge: (destinationArray, sourceArray) => [
         ...sourceArray,
         ...destinationArray.filter((d) =>
-          sourceArray.every((s) => !isEqual(d, s))
+          sourceArray.every((s) => {
+            if (s.id) {
+              const ref = _apolloClient.cache.identify(s);
+              return ref !== d.__ref;
+            }
+            return !isEqual(d, s);
+          })
         ),
       ],
     });
